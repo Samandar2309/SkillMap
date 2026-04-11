@@ -8,7 +8,6 @@ from .models import User
 
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
-    """Admin interface for custom user model with email-only auth."""
 
     ordering = ("-created_at",)
     list_display = ("id", "email", "is_verified", "is_staff", "created_at")
