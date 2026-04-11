@@ -1,0 +1,582 @@
+openapi: 3.0.3
+info:
+  title: SkillMap AI API
+  version: v1
+  description: AI-based student development platform API
+paths:
+  /api/v1/accounts/login/:
+    post:
+      operationId: accounts_login_create
+      description: Authenticate user and return JWT tokens.
+      tags:
+      - accounts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+          description: ''
+  /api/v1/accounts/me/:
+    get:
+      operationId: accounts_me_retrieve
+      description: Retrieve authenticated user's profile.
+      tags:
+      - accounts
+      security:
+      - jwtAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/accounts/register/:
+    post:
+      operationId: accounts_register_create
+      description: Register new user with email and password.
+      tags:
+      - accounts
+      responses:
+        '200':
+          description: No response body
+  /api/v1/accounts/verify-email/:
+    get:
+      operationId: accounts_verify_email_retrieve
+      description: Verify user email via token.
+      tags:
+      - accounts
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: accounts_verify_email_create
+      description: Verify user email via token.
+      tags:
+      - accounts
+      responses:
+        '200':
+          description: No response body
+  /api/v1/ai/generate/:
+    post:
+      operationId: ai_generate_create
+      description: |-
+        Queue roadmap generation task.
+
+        Returns:
+            202 Accepted with task_id for status polling
+            503 Service Unavailable if Celery broker unreachable
+      tags:
+      - ai
+      security:
+      - jwtAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/profiles/me/:
+    get:
+      operationId: profiles_me_retrieve
+      description: Retrieve or update the authenticated user's profile.
+      tags:
+      - profiles
+      security:
+      - jwtAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+          description: ''
+    put:
+      operationId: profiles_me_update
+      description: Retrieve or update the authenticated user's profile.
+      tags:
+      - profiles
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProfileRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProfileRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProfileRequest'
+      security:
+      - jwtAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+          description: ''
+    patch:
+      operationId: profiles_me_partial_update
+      description: Retrieve or update the authenticated user's profile.
+      tags:
+      - profiles
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedProfileRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedProfileRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedProfileRequest'
+      security:
+      - jwtAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+          description: ''
+  /api/v1/profiles/onboard/:
+    put:
+      operationId: profiles_onboard_update
+      description: Complete onboarding for the authenticated user's existing profile.
+      tags:
+      - profiles
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OnboardingRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/OnboardingRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/OnboardingRequest'
+      security:
+      - jwtAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Onboarding'
+          description: ''
+    patch:
+      operationId: profiles_onboard_partial_update
+      description: Complete onboarding for the authenticated user's existing profile.
+      tags:
+      - profiles
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedOnboardingRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedOnboardingRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedOnboardingRequest'
+      security:
+      - jwtAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Onboarding'
+          description: ''
+  /api/v1/progress/leaderboard/:
+    get:
+      operationId: progress_leaderboard_list
+      description: Returns top users ranked by gamification points.
+      tags:
+      - progress
+      security:
+      - jwtAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LeaderboardEntry'
+          description: ''
+  /api/v1/progress/my-stats/:
+    get:
+      operationId: progress_my_stats_retrieve
+      description: Returns user gamification counters and roadmap completion analytics.
+      tags:
+      - progress
+      security:
+      - jwtAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/recommendations/my/:
+    get:
+      operationId: recommendations_my_retrieve
+      description: |-
+        Get personalized recommendations.
+
+        Returns:
+            200 OK with count and results list
+            400 Bad Request if user profile missing
+      tags:
+      - recommendations
+      security:
+      - jwtAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/roadmaps/me/:
+    get:
+      operationId: roadmaps_me_retrieve
+      description: Returns the current user's roadmap with nested phases and tasks.
+      tags:
+      - roadmaps
+      security:
+      - jwtAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/roadmaps/tasks/{id}/:
+    patch:
+      operationId: roadmaps_tasks_partial_update
+      description: Allows users to patch completion state of their own roadmap tasks.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - roadmaps
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedTaskUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedTaskUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedTaskUpdateRequest'
+      security:
+      - jwtAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskUpdate'
+          description: ''
+  /api/v1/tests/questions/:
+    get:
+      operationId: tests_questions_list
+      description: Returns all active aptitude questions with their choices.
+      tags:
+      - tests
+      security:
+      - jwtAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Question'
+          description: ''
+  /api/v1/tests/submit/:
+    post:
+      operationId: tests_submit_create
+      description: Creates a test attempt and stores selected answers in one transaction.
+      tags:
+      - tests
+      security:
+      - jwtAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+components:
+  schemas:
+    BlankEnum:
+      enum:
+      - ''
+    Choice:
+      type: object
+      description: Public choice representation without score details.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        text:
+          type: string
+          maxLength: 255
+      required:
+      - id
+      - text
+    EnglishLevelEnum:
+      enum:
+      - A1
+      - A2
+      - B1
+      - B2
+      - C1
+      - C2
+      type: string
+      description: |-
+        * `A1` - A1
+        * `A2` - A2
+        * `B1` - B1
+        * `B2` - B2
+        * `C1` - C1
+        * `C2` - C2
+    LeaderboardEntry:
+      type: object
+      description: Serializer for top user rankings.
+      properties:
+        email:
+          type: string
+          format: email
+          readOnly: true
+        total_points:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+        current_streak:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+      required:
+      - email
+    LoginRequest:
+      type: object
+      description: Serializer for email/password login.
+      properties:
+        email:
+          type: string
+          format: email
+          minLength: 1
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+      required:
+      - email
+      - password
+    LoginResponse:
+      type: object
+      description: Serializer for login response payload.
+      properties:
+        refresh:
+          type: string
+        access:
+          type: string
+        user:
+          allOf:
+          - $ref: '#/components/schemas/User'
+          readOnly: true
+      required:
+      - access
+      - refresh
+      - user
+    Onboarding:
+      type: object
+      description: Serializer for completing onboarding for the current user.
+      properties:
+        direction:
+          type: string
+          maxLength: 100
+        english_level:
+          oneOf:
+          - $ref: '#/components/schemas/EnglishLevelEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+        current_goal:
+          type: string
+    OnboardingRequest:
+      type: object
+      description: Serializer for completing onboarding for the current user.
+      properties:
+        direction:
+          type: string
+          maxLength: 100
+        english_level:
+          oneOf:
+          - $ref: '#/components/schemas/EnglishLevelEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+        current_goal:
+          type: string
+    PatchedOnboardingRequest:
+      type: object
+      description: Serializer for completing onboarding for the current user.
+      properties:
+        direction:
+          type: string
+          maxLength: 100
+        english_level:
+          oneOf:
+          - $ref: '#/components/schemas/EnglishLevelEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+        current_goal:
+          type: string
+    PatchedProfileRequest:
+      type: object
+      description: Serializer for reading and partially updating a user's profile.
+      properties:
+        direction:
+          type: string
+          maxLength: 100
+        english_level:
+          oneOf:
+          - $ref: '#/components/schemas/EnglishLevelEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+        current_goal:
+          type: string
+    PatchedTaskUpdateRequest:
+      type: object
+      description: Restricted serializer for task completion updates.
+      properties:
+        is_completed:
+          type: boolean
+    Profile:
+      type: object
+      description: Serializer for reading and partially updating a user's profile.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        direction:
+          type: string
+          maxLength: 100
+        english_level:
+          oneOf:
+          - $ref: '#/components/schemas/EnglishLevelEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+        current_goal:
+          type: string
+        is_onboarded:
+          type: boolean
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        user:
+          type: integer
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - is_onboarded
+      - updated_at
+      - user
+    ProfileRequest:
+      type: object
+      description: Serializer for reading and partially updating a user's profile.
+      properties:
+        direction:
+          type: string
+          maxLength: 100
+        english_level:
+          oneOf:
+          - $ref: '#/components/schemas/EnglishLevelEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+        current_goal:
+          type: string
+    Question:
+      type: object
+      description: Question payload used by the user-facing test API.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        text:
+          type: string
+        skill_category:
+          type: string
+          maxLength: 100
+        choices:
+          type: array
+          items:
+            $ref: '#/components/schemas/Choice'
+          readOnly: true
+      required:
+      - choices
+      - id
+      - skill_category
+      - text
+    TaskUpdate:
+      type: object
+      description: Restricted serializer for task completion updates.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        is_completed:
+          type: boolean
+      required:
+      - id
+    User:
+      type: object
+      description: Read-only user profile serializer.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        email:
+          type: string
+          format: email
+          readOnly: true
+        is_verified:
+          type: boolean
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - email
+      - id
+      - is_verified
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
