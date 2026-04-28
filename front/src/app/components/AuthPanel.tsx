@@ -28,7 +28,7 @@ export function AuthPanel({ onLogin, onRegister, onVerify, loading, error }: Aut
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <div className="w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-lg space-y-4">
         <h2>{isRegister ? 'Ro\'yxatdan o\'tish' : 'Kirish'}</h2>
-        <p className="text-sm text-muted-foreground">SkillMap API bilan real integratsiya</p>
+        <p className="text-sm text-muted-foreground">SkillMap API bilan haqiqiy integratsiya</p>
 
         <input
           className="w-full rounded-lg border border-border bg-background px-3 py-2"
@@ -72,7 +72,7 @@ export function AuthPanel({ onLogin, onRegister, onVerify, loading, error }: Aut
         </button>
 
         <div className="border-t border-border pt-4 space-y-2">
-          <p className="text-xs text-muted-foreground">Email verify (ixtiyoriy):</p>
+          <p className="text-xs text-muted-foreground">Email tasdiqlash (ixtiyoriy):</p>
           <input
             className="w-full rounded-lg border border-border bg-background px-3 py-2"
             placeholder="uid"
@@ -90,7 +90,7 @@ export function AuthPanel({ onLogin, onRegister, onVerify, loading, error }: Aut
             disabled={loading || !uid || !verifyToken}
             onClick={() => void onVerify(uid, verifyToken)}
           >
-            Verify email
+            Emailni tasdiqlash
           </button>
         </div>
       </div>

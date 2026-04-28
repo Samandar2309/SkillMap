@@ -35,11 +35,11 @@ export function Dashboard({ stats, leaderboard, loading, error }: DashboardProps
         <Card icon={<Star className="w-5 h-5" />} label="Jami XP" value={String(stats.totalPoints)} />
         <Card icon={<Flame className="w-5 h-5" />} label="Joriy streak" value={String(stats.currentStreak)} />
         <Card icon={<Target className="w-5 h-5" />} label="Bajarilgan task" value={`${stats.completedTasksCount}/${stats.totalTasksCount}`} />
-        <Card icon={<Trophy className="w-5 h-5" />} label="Roadmap progress" value={`${stats.roadmapCompletionPercentage}%`} />
+        <Card icon={<Trophy className="w-5 h-5" />} label="Yo'l xarita progressi" value={`${stats.roadmapCompletionPercentage}%`} />
       </div>
 
       <div className="rounded-xl border border-border p-5">
-        <h3 className="mb-4">Leaderboard</h3>
+        <h3 className="mb-4">Yetakchilar jadvali</h3>
         {leaderboard.length === 0 && <p className="text-sm text-muted-foreground">Hozircha ma'lumot yo'q.</p>}
         <div className="space-y-2">
           {leaderboard.map((entry, index) => (

@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from drf_spectacular.utils import extend_schema
 
+from roadmaps.models import Roadmap
 from roadmaps.models import Task
 
 from .models import UserProgress
@@ -28,7 +29,7 @@ class MyDashboardStatsView(APIView):
     def get(self, request) -> Response:
         progress, _ = UserProgress.objects.get_or_create(user=request.user)
 
-        roadmap = getattr(request.user, "roadmap", None)
+        roadmap = Roadmap.objects.filter(user=request.user, is_active=True).first()
         if roadmap is None:
             completed_tasks_count = 0
             total_tasks_count = 0

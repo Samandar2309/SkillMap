@@ -23,8 +23,8 @@ class GeneratedPhaseSerializer(serializers.Serializer):
 class GeneratedRoadmapSerializer(serializers.Serializer):
     """Validated roadmap shape returned to API consumers."""
 
-    roadmap_title = serializers.CharField(max_length=255)
-    summary = serializers.CharField()
+    title = serializers.CharField(max_length=255)
+    estimated_months = serializers.IntegerField(min_value=1)
     phases = GeneratedPhaseSerializer(many=True)
 
 

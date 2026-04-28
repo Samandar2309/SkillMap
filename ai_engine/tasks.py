@@ -33,16 +33,16 @@ def generate_roadmap_task(self, user_id: int) -> dict[str, Any]:
         InvalidJSONOutputError: If LLM schema validation fails
     """
     try:
-        user = User.objects.select_related("profile").get(pk=user_id)
-        logger.info(f"Generating roadmap for user {user_id}")
+        user = User.objects.get(pk=user_id)
+        logger.info("Starting roadmap generation for user %s", user_id)
 
-        generated_payload = RoadmapGeneratorService().generate_for_user(user)
-        logger.debug(f"LLM generation successful for user {user_id}")
+        generated_payload = RoadmapGeneratorService().generate_roadmap(user)
+        logger.info("AI response received for user %s", user_id)
 
         roadmap = RoadmapBuilderService().build_from_json(
             user=user, json_data=generated_payload
         )
-        logger.info(f"Roadmap {roadmap.id} built successfully for user {user_id}")
+        logger.info("Roadmap %s saved successfully for user %s", roadmap.id, user_id)
 
         return {
             "roadmap_id": roadmap.id,
@@ -51,18 +51,18 @@ def generate_roadmap_task(self, user_id: int) -> dict[str, Any]:
         }
 
     except User.DoesNotExist as exc:
-        logger.error(f"User {user_id} not found")
+        logger.error("User %s not found", user_id)
         raise
 
     except ValueError as exc:
-        logger.error(f"ValueError for user {user_id}: {exc}")
+        logger.error("ValueError for user %s: %s", user_id, exc)
         raise
 
     except InvalidJSONOutputError as exc:
-        logger.error(f"LLM schema validation failed for user {user_id}: {exc}")
+        logger.error("LLM schema validation failed for user %s: %s", user_id, exc)
         raise
 
     except Exception as exc:
-        logger.error(f"Unexpected error generating roadmap for user {user_id}: {exc}")
+        logger.error("Unexpected error generating roadmap for user %s: %s", user_id, exc)
         raise
 

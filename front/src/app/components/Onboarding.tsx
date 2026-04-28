@@ -24,13 +24,13 @@ export function Onboarding({ loading, error, onSubmit }: OnboardingProps) {
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <div className="w-full max-w-2xl rounded-2xl border border-border bg-card p-6 space-y-4">
-        <h2>Onboarding</h2>
+        <h2>Boshlang'ich sozlash</h2>
         <p className="text-sm text-muted-foreground">
-          Ma'lumot yuborilgach, `/profiles/onboard/` chaqiriladi va keyin `/ai/generate/` + polling ishga tushadi.
+          Ma'lumot yuborilgach, `/onboarding` yangilanadi va keyin `/roadmaps/generate` ishga tushadi.
         </p>
 
         <div className="space-y-2">
-          <label className="text-sm">Direction</label>
+          <label className="text-sm">Yo'nalish</label>
           <input
             className="w-full rounded-lg border border-border bg-background px-3 py-2"
             placeholder="Masalan: backend"
@@ -40,7 +40,7 @@ export function Onboarding({ loading, error, onSubmit }: OnboardingProps) {
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm">English level</label>
+          <label className="text-sm">Ingliz tili darajasi</label>
           <select
             className="w-full rounded-lg border border-border bg-background px-3 py-2"
             value={englishLevel}
@@ -55,7 +55,7 @@ export function Onboarding({ loading, error, onSubmit }: OnboardingProps) {
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm">Current goal</label>
+          <label className="text-sm">Joriy maqsad</label>
           <textarea
             className="w-full rounded-lg border border-border bg-background px-3 py-2"
             rows={5}

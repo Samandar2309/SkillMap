@@ -32,15 +32,15 @@ export function Profile({ user, profile, loading, error }: ProfileProps) {
         <div className="rounded-xl border border-border p-5 space-y-2">
           <h3>Akkaunt</h3>
           <p><strong>Email:</strong> {user.email}</p>
-          <p><strong>Verified:</strong> {user.is_verified ? 'Ha' : 'Yo\'q'}</p>
-          <p><strong>Direction:</strong> {profile.direction || '-'}</p>
-          <p><strong>English level:</strong> {profile.englishLevel || '-'}</p>
+          <p><strong>Tasdiqlangan:</strong> {user.is_verified ? 'Ha' : 'Yo\'q'}</p>
+          <p><strong>Yo'nalish:</strong> {profile.direction || '-'}</p>
+          <p><strong>Ingliz darajasi:</strong> {profile.englishLevel || '-'}</p>
         </div>
 
         <div className="rounded-xl border border-border p-5 space-y-2">
-          <h3>Current goal</h3>
+          <h3>Joriy maqsad</h3>
           <p className="text-muted-foreground">{profile.currentGoal || 'Maqsad hali kiritilmagan'}</p>
-          <p><strong>Onboarded:</strong> {profile.isOnboarded ? 'Ha' : 'Yo\'q'}</p>
+          <p><strong>Boshlang'ich sozlash:</strong> {profile.isOnboarded ? 'Yakunlangan' : 'Yakunlanmagan'}</p>
         </div>
       </div>
     </div>

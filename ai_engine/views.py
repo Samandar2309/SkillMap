@@ -7,7 +7,7 @@ from uuid import UUID
 
 from celery.exceptions import CeleryError
 from celery.result import AsyncResult
-from django.conf import settings
+from django.core.cache import cache
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -21,6 +21,12 @@ from .tasks import generate_roadmap_task
 from .serializers import RoadmapTaskResponseSerializer, RoadmapTaskStatusSerializer
 
 logger = logging.getLogger(__name__)
+TASK_OWNER_CACHE_PREFIX = "ai_engine:roadmap_task_owner"
+TASK_OWNER_TTL_SECONDS = 60 * 60 * 24
+
+
+def _task_owner_cache_key(task_id: str) -> str:
+    return f"{TASK_OWNER_CACHE_PREFIX}:{task_id}"
 
 
 class GenerateRoadmapAPIView(APIView):
@@ -43,25 +49,23 @@ class GenerateRoadmapAPIView(APIView):
             503 Service Unavailable if Celery broker unreachable
         """
         try:
-            # Validate prerequisites before queueing or executing the task.
-            # This keeps missing profile / missing test attempt errors as client-side
-            # failures instead of surfacing as a Celery task exception.
             RoadmapGeneratorService().build_prompt(request.user)
 
-            if getattr(settings, "CELERY_TASK_ALWAYS_EAGER", False):
-                async_result = generate_roadmap_task.apply(args=(request.user.id,))
-                logger.info(
-                    "Executed roadmap generation task eagerly for user %s (task_id=%s)",
-                    request.user.id,
-                    async_result.id,
-                )
-            else:
-                async_result = generate_roadmap_task.delay(request.user.id)
-                logger.info(
-                    "Queued roadmap generation task %s for user %s",
-                    async_result.id,
-                    request.user.id,
-                )
+            async_result = generate_roadmap_task.delay(request.user.id)
+            logger.info(
+                "Queued roadmap generation task %s for user %s",
+                async_result.id,
+                request.user.id,
+            )
+
+            if not async_result.id:
+                raise CeleryError("Task id was not returned by broker.")
+
+            cache.set(
+                _task_owner_cache_key(str(async_result.id)),
+                request.user.id,
+                timeout=TASK_OWNER_TTL_SECONDS,
+            )
 
             return Response(
                 {
@@ -78,19 +82,19 @@ class GenerateRoadmapAPIView(APIView):
                 status=status.HTTP_503_SERVICE_UNAVAILABLE,
             )
         except LLMTimeoutError as exc:
-            logger.warning("Gemini timeout for user %s: %s", request.user.id, exc)
+            logger.warning("Groq timeout for user %s: %s", request.user.id, exc)
             return Response(
-                {"detail": "Gemini request timed out."},
+                {"detail": "Groq request timed out."},
                 status=status.HTTP_502_BAD_GATEWAY,
             )
         except LLMConnectionError as exc:
-            logger.warning("Gemini connection failure for user %s: %s", request.user.id, exc)
+            logger.warning("Groq connection failure for user %s: %s", request.user.id, exc)
             return Response(
-                {"detail": "Failed to connect to Gemini provider."},
+                {"detail": "Failed to connect to Groq provider."},
                 status=status.HTTP_503_SERVICE_UNAVAILABLE,
             )
         except InvalidJSONOutputError as exc:
-            logger.warning("Gemini schema validation failed for user %s: %s", request.user.id, exc)
+            logger.warning("Groq schema validation failed for user %s: %s", request.user.id, exc)
             return Response(
                 {"detail": "LLM output schema validation failed."},
                 status=status.HTTP_400_BAD_REQUEST,
@@ -124,6 +128,13 @@ class RoadmapTaskStatusAPIView(APIView):
             )
 
         try:
+            owner_user_id = cache.get(_task_owner_cache_key(task_id))
+            if owner_user_id is None or int(owner_user_id) != int(request.user.id):
+                return Response(
+                    {"detail": "Task not found."},
+                    status=status.HTTP_404_NOT_FOUND,
+                )
+
             async_result = AsyncResult(task_id)
             payload: dict[str, object] = {
                 "task_id": task_id,

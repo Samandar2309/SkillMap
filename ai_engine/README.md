@@ -1,6 +1,6 @@
 # AI Engine
 
-Service-layer app that generates a validated roadmap JSON using Gemini.
+Service-layer app that generates a validated roadmap JSON using Groq.
 
 ## Endpoint
 
@@ -8,8 +8,8 @@ Service-layer app that generates a validated roadmap JSON using Gemini.
 
 ## Environment Variables
 
-- `GEMINI_API_KEY` (required)
-- `GEMINI_MODEL` (optional, default: `gemini-1.5-flash`)
+- `GROQ_API_KEY` (required)
+- `GROQ_MODEL` (optional, default: `llama-3.1-70b-versatile`)
 
 ## Notes
 

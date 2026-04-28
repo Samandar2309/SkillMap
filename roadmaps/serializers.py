@@ -6,34 +6,31 @@ from .models import Phase, Roadmap, Task
 
 
 class TaskSerializer(serializers.ModelSerializer):
-    """Task serializer for nested roadmap reads."""
-
-    title = serializers.CharField(label="Task title", help_text="Short title for the task.")
-    description = serializers.CharField(
-        label="Task description",
-        help_text="Detailed explanation of what the learner should do.",
-        required=False,
-        allow_blank=True,
-    )
-    resource_link = serializers.URLField(
-        label="Resource link",
-        help_text="Optional URL to a learning resource for this task.",
-        required=False,
-        allow_blank=True,
-    )
+    """Bitta dars/topshiriq ma'lumotlarini qaytaruvchi serializer."""
 
     class Meta:
         model = Task
-        fields = "__all__"
-        read_only_fields = ("is_completed",)
+        # Pro Tip: fields = "__all__" yozish xavfsizlik va aniqlik jihatidan yomon amaliyot.
+        # Har doim maydonlarni aniq ko'rsatish kerak.
+        fields = (
+            "id",
+            "day_number",
+            "title",
+            "description",
+            "resource_link",
+            "extra_resources",
+            "is_completed",
+            "completed_at"
+        )
+        read_only_fields = ("is_completed", "completed_at")
 
 
 class TaskUpdateSerializer(serializers.ModelSerializer):
-    """Restricted serializer for task completion updates."""
+    """Faqat topshiriqni 'bajarildi' holatiga o'tkazish uchun ishlatiladi."""
 
     is_completed = serializers.BooleanField(
-        label="Completed",
-        help_text="Mark the task as completed or not completed.",
+        label="Bajarildimi",
+        help_text="Topshiriqni bajarildi (True) deb belgilash.",
     )
 
     class Meta:
@@ -43,51 +40,65 @@ class TaskUpdateSerializer(serializers.ModelSerializer):
 
 
 class PhaseSerializer(serializers.ModelSerializer):
-    """Nested phase serializer with tasks."""
+    """Roadmap ichidagi bosqichlar (modullar) va ularning darslari."""
 
     tasks = TaskSerializer(many=True, read_only=True)
-    title = serializers.CharField(label="Phase title", help_text="Name of the phase.")
-    order = serializers.IntegerField(label="Phase order", help_text="Ordering of the phase in the roadmap.")
 
     class Meta:
         model = Phase
-        fields = ("id", "roadmap", "title", "order", "is_completed", "tasks")
-        read_only_fields = ("roadmap",)
+        fields = ("id", "title", "order", "is_completed", "tasks")
 
 
-class RoadmapSerializer(serializers.ModelSerializer):
-    """Roadmap serializer with nested phases and tasks."""
-
-    phases = PhaseSerializer(many=True, read_only=True)
-    title = serializers.CharField(label="Roadmap title", help_text="Title of the generated roadmap.")
-    estimated_months = serializers.IntegerField(
-        label="Estimated months",
-        help_text="Approximate number of months needed to complete the roadmap.",
-    )
+class RoadmapListSerializer(serializers.ModelSerializer):
+    """
+    PRO TIP: Ro'yxat (List) uchun yengillashtirilgan serializer.
+    Foydalanuvchi o'z rejalarini ko'rganda minglab tasklarni bittada yuklab
+    serverni qotirmasligi uchun faqat asosiy ma'lumotlar qaytariladi.
+    """
+    # Modeldagi @property bo'lgan progress_percentage ni API ga chiqarish
+    progress_percentage = serializers.ReadOnlyField()
 
     class Meta:
         model = Roadmap
         fields = (
             "id",
-            "user",
             "title",
             "estimated_months",
+            "is_active",
             "is_completed",
+            "progress_percentage",  # Qo'shildi (9-bosqich uchun)
             "created_at",
-            "phases",
         )
-        read_only_fields = ("user", "created_at")
+
+
+class RoadmapDetailSerializer(serializers.ModelSerializer):
+    """
+    Rejaning ichiga kirganda (Detail) barcha bosqich va darslarni qaytaradi.
+    """
+    phases = PhaseSerializer(many=True, read_only=True)
+    progress_percentage = serializers.ReadOnlyField()
+
+    class Meta:
+        model = Roadmap
+        fields = (
+            "id",
+            "title",
+            "estimated_months",
+            "is_active",
+            "is_completed",
+            "progress_percentage",
+            "created_at",
+            "phases",  # Barcha darslar shu yerda keladi
+        )
 
 
 class RoadmapErrorSerializer(serializers.Serializer):
-    """Error response serializer for roadmap endpoints."""
+    """API xatoliklari uchun standartlashtirilgan javob."""
 
-    detail = serializers.CharField(label="Detail", help_text="Human readable error message.")
+    detail = serializers.CharField(label="Izoh", help_text="Tushunarli xatolik matni.")
     code = serializers.CharField(
         required=False,
         allow_blank=True,
-        label="Error code",
-        help_text="Machine-readable error code when available.",
+        label="Xatolik kodi",
+        help_text="Tizim uchun maxsus xato kodi (masalan: roadmap_not_found).",
     )
-
-

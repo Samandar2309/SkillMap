@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Initialize environ
 env = environ.Env(
-    DEBUG=(bool, False),
+    DEBUG=(bool, True),
     DJANGO_ALLOWED_HOSTS=(list, ["localhost", "127.0.0.1"]),
     DJANGO_CORS_ALLOWED_ORIGINS=(list, []),
     DJANGO_CORS_ALLOW_ALL_ORIGINS=(bool, False),
@@ -33,6 +33,7 @@ env = environ.Env(
     DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS=(bool, False),
     DJANGO_SECURE_HSTS_PRELOAD=(bool, False),
     DJANGO_USE_X_FORWARDED_PROTO=(bool, False),
+    USE_SQLITE=(bool, False),
 )
 
 environ.Env.read_env(BASE_DIR / ".env")
@@ -62,7 +63,13 @@ INSTALLED_APPS = [
     'recommendations',
     'roadmaps',
     'test_system',
-    'ai_engine',
+    # 'ai_engine',
+    'apps.users',
+    'apps.onboarding',
+    'apps.roadmap',
+    'apps.tasks',
+    'apps.analytics',
+    'apps.ai',
 ]
 
 AUTH_USER_MODEL = 'accounts.User'
@@ -100,12 +107,38 @@ WSGI_APPLICATION = 'main.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if DEBUG or env.bool('USE_SQLITE'):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+            'OPTIONS': {
+                'timeout': 30,
+            },
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': env.db(
+            'DATABASE_URL',
+            default='postgres://postgres:postgres@localhost:5432/skillmap',
+        )
+    }
+
+if DEBUG or env.bool('USE_SQLITE'):
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+            'LOCATION': 'skillmap-dev-cache',
+        }
+    }
+else:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+            'LOCATION': env('REDIS_URL', default='redis://localhost:6379/1'),
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
@@ -224,23 +257,35 @@ SIMPLE_JWT = {
 # Email Configuration
 EMAIL_BACKEND = env(
     "DJANGO_EMAIL_BACKEND",
-    default="django.core.mail.backends.console.EmailBackend",
+    default="django.core.mail.backends.smtp.EmailBackend",
 )
+EMAIL_HOST = env("EMAIL_HOST", default="smtp.gmail.com")
+EMAIL_PORT = env.int("EMAIL_PORT", default=587)
+EMAIL_HOST_USER = env("EMAIL_HOST_USER", default="")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default="")
+EMAIL_USE_TLS = env.bool("EMAIL_USE_TLS", default=True)
+EMAIL_USE_SSL = env.bool("EMAIL_USE_SSL", default=False)
+EMAIL_TIMEOUT = env.int("EMAIL_TIMEOUT", default=20)
 DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="no-reply@skillmap.local")
 PASSWORD_RESET_TIMEOUT = 60 * 60 * 24
-FRONTEND_BASE_URL = env("FRONTEND_BASE_URL", default="http://localhost:8000")
+FRONTEND_URL = env("FRONTEND_URL", default="http://localhost:3000")
+FRONTEND_BASE_URL = FRONTEND_URL
+EMAIL_DELIVERY_REQUIRED = env.bool("EMAIL_DELIVERY_REQUIRED", default=not DEBUG)
 
-# LLM Configuration
-GEMINI_API_KEY = env("GEMINI_API_KEY", default="")
-GEMINI_MODEL = env("GEMINI_MODEL", default="gemini-1.5-flash")
+# LLM Configuration (Groq)
+GROQ_API_KEY = env('GROQ_API_KEY', default='')
+GROQ_MODEL = env('GROQ_MODEL', default='llama-3.3-70b-versatile')
+GROQ_TIMEOUT_SECONDS = env.int('GROQ_TIMEOUT_SECONDS', default=30)
+GROQ_API_BASE_URL = env('GROQ_API_BASE_URL', default='https://api.groq.com/openai/v1')
+GROQ_API_ENDPOINT = env('GROQ_API_ENDPOINT', default=f'{GROQ_API_BASE_URL.rstrip("/")}/chat/completions')
+
+# LLM Router Configuration
+LLM_PROVIDER_PRIORITY = env('LLM_PROVIDER_PRIORITY', default='groq')
+LLM_MAX_RETRIES = env.int('LLM_MAX_RETRIES', default=2)
 
 # Celery Configuration
-if DEBUG:
-    CELERY_BROKER_URL = "memory://"
-    CELERY_RESULT_BACKEND = "cache+memory://"
-else:
-    CELERY_BROKER_URL = env("CELERY_BROKER_URL", default="redis://localhost:6379/0")
-    CELERY_RESULT_BACKEND = env("CELERY_RESULT_BACKEND", default=CELERY_BROKER_URL)
+CELERY_BROKER_URL = env("CELERY_BROKER_URL", default="redis://localhost:6379/0")
+CELERY_RESULT_BACKEND = env("CELERY_RESULT_BACKEND", default=CELERY_BROKER_URL)
 CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"

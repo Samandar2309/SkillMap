@@ -23,7 +23,7 @@ export function Roadmap({ roadmap, loading, error, onToggleTask }: RoadmapProps)
   }, [roadmap]);
 
   if (loading) {
-    return <div className="p-8">Roadmap yuklanmoqda...</div>;
+    return <div className="p-8">Yo'l xarita yuklanmoqda...</div>;
   }
 
   if (error) {
@@ -31,7 +31,7 @@ export function Roadmap({ roadmap, loading, error, onToggleTask }: RoadmapProps)
   }
 
   if (!roadmap) {
-    return <div className="p-8 text-muted-foreground">Roadmap hali mavjud emas. AI generation ni ishga tushiring.</div>;
+    return <div className="p-8 text-muted-foreground">Yo'l xarita hali mavjud emas. AI orqali yaratishni ishga tushiring.</div>;
   }
 
   return (
@@ -49,7 +49,7 @@ export function Roadmap({ roadmap, loading, error, onToggleTask }: RoadmapProps)
             <h3>
               {phase.order}. {phase.title}
             </h3>
-            <span className="text-sm text-muted-foreground">{phase.isCompleted ? 'Completed' : 'In progress'}</span>
+            <span className="text-sm text-muted-foreground">{phase.isCompleted ? 'Bajarilgan' : 'Jarayonda'}</span>
           </div>
 
           <div className="space-y-2">

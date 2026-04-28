@@ -66,10 +66,10 @@ export function Resources({ recommendations, loading, error }: ResourcesProps) {
             <h3>{item.title}</h3>
             <p className="text-sm text-muted-foreground">{item.description || 'Tavsif mavjud emas'}</p>
             <div className="text-xs text-muted-foreground">
-              <p>Direction: {item.direction}</p>
-              <p>English: {item.minEnglishLevel} - {item.maxEnglishLevel}</p>
-              <p>Type: {item.resourceType}</p>
-              <p>Priority: {item.priority}</p>
+              <p>Yo'nalish: {item.direction}</p>
+              <p>Ingliz darajasi: {item.minEnglishLevel} - {item.maxEnglishLevel}</p>
+              <p>Turi: {item.resourceType}</p>
+              <p>Ustuvorlik: {item.priority}</p>
             </div>
             <a href={item.url} target="_blank" rel="noreferrer" className="inline-block text-sm text-primary underline">
               Ochish

@@ -3,16 +3,18 @@
 from __future__ import annotations
 
 import logging
-from datetime import timedelta
+from datetime import date, timedelta
 from smtplib import SMTPException
 
 from celery import shared_task
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import send_mail
+from django.db.models import Prefetch
 from django.utils import timezone
 
-from .models import StudyTimeLog, UserProgress
+from .models import StudyTimeLog
 
 logger = logging.getLogger(__name__)
 User = get_user_model()
@@ -29,27 +31,33 @@ def check_inactive_users_and_send_emails(self) -> dict[str, int]:
     emailed_users = 0
     errors = 0
 
-    users = User.objects.filter(is_active=True).only("id", "email")
+    users = (
+        User.objects.filter(is_active=True)
+        .select_related("progress")
+        .prefetch_related(
+            Prefetch(
+                "study_time_logs",
+                queryset=StudyTimeLog.objects.only("user_id", "date").order_by("-date"),
+            )
+        )
+    )
 
     for user in users:
         checked_users += 1
 
-        last_study_log_date = (
-            StudyTimeLog.objects.filter(user=user)
-            .order_by("-date")
-            .values_list("date", flat=True)
-            .first()
-        )
-        last_progress_activity = (
-            UserProgress.objects.filter(user=user)
-            .values_list("last_activity_date", flat=True)
-            .first()
-        )
+        study_logs = list(user.study_time_logs.all())
+        last_study_log_date = study_logs[0].date if study_logs else None
 
-        activity_dates = [
+        try:
+            progress = user.progress
+            last_progress_activity = progress.last_activity_date
+        except ObjectDoesNotExist:
+            last_progress_activity = None
+
+        activity_dates: list[date] = [
             value
             for value in (last_study_log_date, last_progress_activity)
-            if value is not None
+            if isinstance(value, date)
         ]
 
         last_activity_date = max(activity_dates) if activity_dates else None

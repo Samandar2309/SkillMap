@@ -1,14 +1,14 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, cast
 
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
-from test_system.models import TestAttempt
+from test_system.models import StudentProfile
 
 from .exceptions import InvalidJSONOutputError
-from .llm_providers import GeminiProvider
+from .providers import GroqProvider, create_groq_provider
 from .serializers import GeneratedRoadmapSerializer
 
 
@@ -19,44 +19,40 @@ class RoadmapGeneratorService:
     """Service layer for generating validated career roadmaps via LLM."""
 
     def build_prompt(self, user: User) -> str:
-        profile = getattr(user, "profile", None)
-        if profile is None:
-            raise ValueError("Profile does not exist for the current user.")
-
-        latest_attempt = (
-            TestAttempt.objects.filter(user=user)
-            .order_by("-created_at")
-            .only("total_score")
+        profile = (
+            StudentProfile.objects.only("goal__name", "english_level", "hours_per_day")
+            .select_related("goal")
+            .filter(user=user)
             .first()
         )
-        if latest_attempt is None:
-            raise ValueError("No test attempt found for the current user.")
+        if profile is None:
+            raise ValueError("Student profile does not exist for the current user.")
 
-        current_goal = profile.current_goal or "Not provided"
+        current_goal = profile.goal.name if profile.goal_id else "Not provided"
         english_level = profile.english_level or "Not provided"
-        total_score = latest_attempt.total_score
+        hours_per_day = profile.hours_per_day or 2
 
         return (
-            "You are an IT Career Coach. Generate a practical learning roadmap.\n"
-            "Return ONLY JSON. No markdown, no explanation text.\n\n"
-            f"User context:\n"
+            "You are a senior IT career coach. Generate a practical learning roadmap.\n"
+            "Return ONLY valid JSON. No markdown, no commentary, no code fences.\n\n"
+            "User context:\n"
             f"- Goal: {current_goal}\n"
             f"- English level: {english_level}\n"
-            f"- Aptitude total score: {total_score}\n\n"
-            "Required JSON schema:\n"
+            f"- Study hours per day: {hours_per_day}\n\n"
+            "JSON schema:\n"
             "{\n"
-            "  \"roadmap_title\": \"string\",\n"
-            "  \"summary\": \"string\",\n"
-            "  \"phases\": [\n"
+            '  "title": "string",\n'
+            '  "estimated_months": 1,\n'
+            '  "phases": [\n'
             "    {\n"
-            "      \"title\": \"string\",\n"
-            "      \"objective\": \"string\",\n"
-            "      \"duration_weeks\": 1,\n"
-            "      \"tasks\": [\n"
+            '      "title": "string",\n'
+            '      "objective": "string",\n'
+            '      "duration_weeks": 1,\n'
+            '      "tasks": [\n'
             "        {\n"
-            "          \"title\": \"string\",\n"
-            "          \"description\": \"string\",\n"
-            "          \"estimated_days\": 1\n"
+            '          "title": "string",\n'
+            '          "description": "string",\n'
+            '          "estimated_days": 1\n'
             "        }\n"
             "      ]\n"
             "    }\n"
@@ -65,13 +61,14 @@ class RoadmapGeneratorService:
             "Constraints:\n"
             "- phases must contain at least 3 items\n"
             "- each phase must contain at least 3 tasks\n"
-            "- keep tasks concrete and outcome-oriented\n"
+            "- keep tasks concrete, measurable, and outcome-oriented\n"
         )
 
-    def generate_for_user(self, user: User) -> dict[str, Any]:
+    def generate_roadmap(self, user: User) -> dict[str, Any]:
         prompt = self.build_prompt(user)
-        provider = GeminiProvider()
-        raw_output = provider.generate_json(prompt)
+        provider = create_groq_provider()
+        result = provider.generate_json(prompt)
+        raw_output = result.data
 
         serializer = GeneratedRoadmapSerializer(data=raw_output)
         try:
@@ -79,5 +76,8 @@ class RoadmapGeneratorService:
         except serializers.ValidationError as exc:
             raise InvalidJSONOutputError(f"LLM output schema validation failed: {exc}") from exc
 
-        return dict(serializer.validated_data)
+        return cast(dict[str, Any], dict(serializer.validated_data))
+
+    def generate_for_user(self, user: User) -> dict[str, Any]:
+        return self.generate_roadmap(user)
 

@@ -27,18 +27,18 @@ export function Analytics({ stats, loading, error }: AnalyticsProps) {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Metric title="Roadmap completion" value={`${stats.roadmapCompletionPercentage}%`} />
-        <Metric title="Total points" value={`${stats.totalPoints}`} />
-        <Metric title="Completed tasks" value={`${stats.completedTasksCount}`} />
-        <Metric title="Current streak" value={`${stats.currentStreak}`} />
+        <Metric title="Yo'l xarita bajarilishi" value={`${stats.roadmapCompletionPercentage}%`} />
+        <Metric title="Jami ball" value={`${stats.totalPoints}`} />
+        <Metric title="Bajarilgan vazifalar" value={`${stats.completedTasksCount}`} />
+        <Metric title="Joriy seriya" value={`${stats.currentStreak}`} />
       </div>
 
       <div className="rounded-xl border border-border p-5">
         <h3 className="mb-3">Progress tafsiloti</h3>
         <ul className="space-y-2 text-sm">
-          <li>Longest streak: <strong>{stats.longestStreak}</strong></li>
-          <li>Total tasks: <strong>{stats.totalTasksCount}</strong></li>
-          <li>Completed ratio: <strong>{stats.completedTasksCount}/{stats.totalTasksCount}</strong></li>
+          <li>Eng uzun seriya: <strong>{stats.longestStreak}</strong></li>
+          <li>Jami vazifalar: <strong>{stats.totalTasksCount}</strong></li>
+          <li>Bajarilish nisbati: <strong>{stats.completedTasksCount}/{stats.totalTasksCount}</strong></li>
         </ul>
       </div>
     </div>

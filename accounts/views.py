@@ -83,7 +83,7 @@ class LoginView(APIView):
 
 
 class VerifyEmailView(APIView):
-    """Verify user email via token."""
+    """Legacy endpoint - deprecated. Use /api/v1/auth/verify-email instead."""
 
     permission_classes = [AllowAny]
     throttle_classes = [ScopedRateThrottle]

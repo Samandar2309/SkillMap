@@ -1,316 +1,293 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { ThemeProvider } from 'next-themes';
+import { lazy, Suspense } from "react";
 
-import { api, ApiError } from './api/client';
-import { mapProfile, mapRecommendation, mapRoadmap, mapStats, type DashboardStatsView, type ProfileView, type RecommendationView, type RoadmapView } from './api/mappers';
-import type { LeaderboardEntry, Question, User } from './api/types';
-import { AuthPanel } from './components/AuthPanel';
-import { Sidebar } from './components/Sidebar';
-import { Dashboard } from './components/Dashboard';
-import { Roadmap } from './components/Roadmap';
-import { Resources } from './components/Resources';
-import { Analytics } from './components/Analytics';
-import { Profile } from './components/Profile';
-import { Onboarding } from './components/Onboarding';
-import { TestCenter } from './components/TestCenter';
+import { AuthScreen } from "../components/features/auth-screen";
+import { OnboardingIntroPanel } from "../components/features/onboarding-intro-panel";
+import { OnboardingPanel } from "../components/features/onboarding-panel";
+import { VerifyEmailPage } from "../components/features/verify-email-page.tsx";
+import { AppShell } from "../components/layout/app-shell";
+import { Button } from "../components/ui/button";
+import { ErrorState } from "../components/ui/error-state";
+import { LoadingState } from "../components/ui/loading-state";
+import { NotificationCenter } from "../components/ui/notification-center";
+import { SectionErrorBoundary } from "../components/ui/section-error-boundary";
+import { SkipLink } from "../components/ui/skip-link";
+import { useSectionShortcuts } from "../hooks/use-section-shortcuts";
+import { getErrorMessage } from "../lib/error-utils";
+import { preloadSection } from "./section-preload";
+import { useAppController } from "./use-app-controller";
 
-type ViewId = 'dashboard' | 'roadmap' | 'resources' | 'analytics' | 'profile' | 'tests';
-
-const ACCESS_KEY = 'skillmap_access_token';
-
-function parseError(error: unknown): string {
-  if (error instanceof ApiError) {
-    return error.message;
-  }
-  if (error instanceof Error) {
-    return error.message;
-  }
-  return 'Noma\'lum xatolik yuz berdi.';
-}
-
-async function pollTaskUntilDone(token: string, taskId: string): Promise<void> {
-  const maxAttempts = 12;
-  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
-    const status = await api.roadmapTaskStatus(token, taskId);
-    if (status.state === 'SUCCESS') {
-      return;
-    }
-    if (status.state === 'FAILURE') {
-      throw new Error(status.error || 'AI roadmap generation muvaffaqiyatsiz yakunlandi.');
-    }
-    const timeoutMs = Math.min(1000 * 2 ** (attempt - 1), 8000);
-    await new Promise((resolve) => setTimeout(resolve, timeoutMs));
-  }
-  throw new Error('AI roadmap generation timeout. Keyinroq qayta urinib ko\'ring.');
-}
-
-function AppContent() {
-  const [theme, setTheme] = useState<'light' | 'dark'>('light');
-  const [mounted, setMounted] = useState(false);
-
-  const [token, setToken] = useState<string | null>(localStorage.getItem(ACCESS_KEY));
-  const [user, setUser] = useState<User | null>(null);
-  const [profile, setProfile] = useState<ProfileView | null>(null);
-
-  const [roadmap, setRoadmap] = useState<RoadmapView | null>(null);
-  const [stats, setStats] = useState<DashboardStatsView | null>(null);
-  const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
-  const [recommendations, setRecommendations] = useState<RecommendationView[]>([]);
-  const [questions, setQuestions] = useState<Question[]>([]);
-
-  const [currentView, setCurrentView] = useState<ViewId>('dashboard');
-
-  const [authLoading, setAuthLoading] = useState(false);
-  const [authError, setAuthError] = useState('');
-
-  const [appLoading, setAppLoading] = useState(false);
-  const [appError, setAppError] = useState('');
-
-  const [onboardingLoading, setOnboardingLoading] = useState(false);
-  const [onboardingError, setOnboardingError] = useState('');
-
-  const [questionsLoading, setQuestionsLoading] = useState(false);
-  const [questionsError, setQuestionsError] = useState('');
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {
-    if (!mounted) {
-      return;
-    }
-    const root = document.documentElement;
-    if (theme === 'dark') {
-      root.classList.add('dark');
-    } else {
-      root.classList.remove('dark');
-    }
-  }, [mounted, theme]);
-
-  const loadQuestions = useCallback(async () => {
-    if (!token) {
-      return;
-    }
-    setQuestionsLoading(true);
-    setQuestionsError('');
-    try {
-      const data = await api.questions(token);
-      setQuestions(data);
-    } catch (error) {
-      setQuestionsError(parseError(error));
-    } finally {
-      setQuestionsLoading(false);
-    }
-  }, [token]);
-
-  const loadIntegratedData = useCallback(async (authToken: string) => {
-    setAppLoading(true);
-    setAppError('');
-
-    try {
-      const [me, profileData, statsData, leaderboardData, recommendationsData] = await Promise.all([
-        api.me(authToken),
-        api.getProfile(authToken),
-        api.myStats(authToken),
-        api.leaderboard(authToken),
-        api.recommendations(authToken),
-      ]);
-
-      setUser(me);
-      setProfile(mapProfile(profileData));
-      setStats(mapStats(statsData));
-      setLeaderboard(leaderboardData);
-      setRecommendations(recommendationsData.results.map(mapRecommendation));
-
-      try {
-        const roadmapData = await api.getRoadmap(authToken);
-        setRoadmap(mapRoadmap(roadmapData));
-      } catch (error) {
-        if (error instanceof ApiError && error.status === 404) {
-          setRoadmap(null);
-        } else {
-          throw error;
-        }
-      }
-
-      if (profileData.is_onboarded) {
-        await loadQuestions();
-      }
-    } catch (error) {
-      setAppError(parseError(error));
-    } finally {
-      setAppLoading(false);
-    }
-  }, [loadQuestions]);
-
-  useEffect(() => {
-    if (!token) {
-      return;
-    }
-    void loadIntegratedData(token);
-  }, [token, loadIntegratedData]);
-
-  const login = useCallback(async (email: string, password: string) => {
-    setAuthLoading(true);
-    setAuthError('');
-    try {
-      const response = await api.login(email, password);
-      localStorage.setItem(ACCESS_KEY, response.access);
-      setToken(response.access);
-    } catch (error) {
-      setAuthError(parseError(error));
-    } finally {
-      setAuthLoading(false);
-    }
-  }, []);
-
-  const register = useCallback(async (email: string, password: string, passwordConfirm: string) => {
-    setAuthLoading(true);
-    setAuthError('');
-    try {
-      await api.register(email, password, passwordConfirm);
-      setAuthError('Ro\'yxatdan o\'tish muvaffaqiyatli. Endi login qiling va email verify qiling.');
-    } catch (error) {
-      setAuthError(parseError(error));
-    } finally {
-      setAuthLoading(false);
-    }
-  }, []);
-
-  const verifyEmail = useCallback(async (uid: string, verifyToken: string) => {
-    setAuthLoading(true);
-    setAuthError('');
-    try {
-      const response = await api.verifyEmail(uid, verifyToken);
-      setAuthError(response.detail);
-    } catch (error) {
-      setAuthError(parseError(error));
-    } finally {
-      setAuthLoading(false);
-    }
-  }, []);
-
-  const logout = useCallback(() => {
-    localStorage.removeItem(ACCESS_KEY);
-    setToken(null);
-    setUser(null);
-    setProfile(null);
-    setRoadmap(null);
-    setStats(null);
-    setLeaderboard([]);
-    setRecommendations([]);
-    setQuestions([]);
-  }, []);
-
-  const submitOnboarding = useCallback(async (payload: { direction: string; english_level: string; current_goal: string }) => {
-    if (!token) {
-      return;
-    }
-
-    setOnboardingLoading(true);
-    setOnboardingError('');
-    try {
-      const updatedProfile = await api.onboard(token, payload);
-      setProfile(mapProfile(updatedProfile));
-
-      const generated = await api.generateRoadmap(token);
-      await pollTaskUntilDone(token, generated.task_id);
-
-      const roadmapData = await api.getRoadmap(token);
-      setRoadmap(mapRoadmap(roadmapData));
-      await loadIntegratedData(token);
-      setCurrentView('roadmap');
-    } catch (error) {
-      setOnboardingError(parseError(error));
-    } finally {
-      setOnboardingLoading(false);
-    }
-  }, [loadIntegratedData, token]);
-
-  const toggleTask = useCallback(async (taskId: number, nextCompleted: boolean) => {
-    if (!token) {
-      return;
-    }
-    await api.updateTask(token, taskId, nextCompleted);
-    const roadmapData = await api.getRoadmap(token);
-    setRoadmap(mapRoadmap(roadmapData));
-    const statsData = await api.myStats(token);
-    setStats(mapStats(statsData));
-  }, [token]);
-
-  const submitTest = useCallback(async (answers: { question_id: number; choice_id: number }[]) => {
-    if (!token) {
-      throw new Error('Authorization yo\'q.');
-    }
-    const response = await api.submitTest(token, { answers });
-    const statsData = await api.myStats(token);
-    setStats(mapStats(statsData));
-    return { totalScore: response.total_score };
-  }, [token]);
-
-  const showOnboarding = useMemo(() => !!user && !!profile && !profile.isOnboarded, [profile, user]);
-
-  if (!mounted) {
-    return null;
-  }
-
-  if (!token) {
-    return (
-      <AuthPanel
-        onLogin={login}
-        onRegister={register}
-        onVerify={verifyEmail}
-        loading={authLoading}
-        error={authError}
-      />
-    );
-  }
-
-  if (showOnboarding) {
-    return <Onboarding loading={onboardingLoading} error={onboardingError} onSubmit={submitOnboarding} />;
-  }
-
+function isAuthRoute(pathname: string): boolean {
   return (
-    <div className="flex h-screen overflow-hidden bg-background">
-      <Sidebar
-        currentView={currentView}
-        onViewChange={(view) => setCurrentView(view as ViewId)}
-        theme={theme}
-        toggleTheme={() => setTheme((prev) => (prev === 'light' ? 'dark' : 'light'))}
-        onLogout={logout}
-      />
-      <main className="flex-1 overflow-y-auto">
-        {appError && <div className="m-4 rounded-lg border border-red-300 bg-red-50 p-3 text-sm text-red-700">{appError}</div>}
-        {currentView === 'dashboard' && (
-          <Dashboard stats={stats} leaderboard={leaderboard} loading={appLoading} error={appError} />
-        )}
-        {currentView === 'roadmap' && (
-          <Roadmap roadmap={roadmap} loading={appLoading} error={appError} onToggleTask={toggleTask} />
-        )}
-        {currentView === 'resources' && (
-          <Resources recommendations={recommendations} loading={appLoading} error={appError} />
-        )}
-        {currentView === 'analytics' && <Analytics stats={stats} loading={appLoading} error={appError} />}
-        {currentView === 'profile' && <Profile user={user} profile={profile} loading={appLoading} error={appError} />}
-        {currentView === 'tests' && (
-          <TestCenter
-            questions={questions}
-            loading={questionsLoading}
-            error={questionsError}
-            onReload={loadQuestions}
-            onSubmit={submitTest}
-          />
-        )}
-      </main>
-    </div>
+    pathname === "/login" ||
+    pathname === "/register" ||
+    pathname === "/check-email" ||
+    pathname === "/onboarding-intro"
   );
 }
 
+const DashboardOverview = lazy(() =>
+  import("../components/features/dashboard-overview").then((module) => ({ default: module.DashboardOverview })),
+);
+const RoadmapPanel = lazy(() =>
+  import("../components/features/roadmap-panel").then((module) => ({ default: module.RoadmapPanel })),
+);
+const TasksPanel = lazy(() =>
+  import("../components/features/tasks-panel").then((module) => ({ default: module.TasksPanel })),
+);
+const ProgressPanel = lazy(() =>
+  import("../components/features/progress-panel").then((module) => ({ default: module.ProgressPanel })),
+);
+const MotivationPanel = lazy(() =>
+  import("../components/features/motivation-panel").then((module) => ({ default: module.MotivationPanel })),
+);
+
 export default function App() {
+  const controller = useAppController();
+  const currentPathname = window.location.pathname;
+  const normalizedPathname = currentPathname.replace(/\/+$/, "") || "/";
+
+  useSectionShortcuts({
+    enabled: controller.isAuthenticated && !controller.showOnboarding,
+    onSelectSection: controller.setSection,
+  });
+
+  if (controller.isBootstrapping) {
+    return <LoadingState label="Ilova ishga tushirilmoqda..." />;
+  }
+
+  if (normalizedPathname === "/verify-email") {
+    return (
+      <>
+        <SkipLink />
+        <VerifyEmailPage
+          onVerifyEmail={controller.verifyEmail}
+          onResendVerification={controller.resendVerification}
+          isVerifyingEmail={controller.isVerifyingEmail}
+          isResendingVerification={controller.isResendingVerification}
+        />
+        <NotificationCenter />
+      </>
+    );
+  }
+
+  if (normalizedPathname === "/onboarding-intro") {
+    return (
+      <>
+        <SkipLink />
+        <div className="min-h-screen bg-background px-4 py-10 sm:px-6 lg:px-8">
+          {controller.isAuthenticated && controller.showOnboarding ? (
+            controller.showOnboardingIntro ? (
+              <OnboardingIntroPanel
+                userName={controller.user?.fullName ?? controller.user?.email}
+                onContinue={controller.continueOnboardingFromIntro}
+              />
+            ) : (
+              <OnboardingPanel
+                isSubmitting={controller.isOnboardingSubmitting}
+                profile={controller.onboardingProfile}
+                isProfileLoading={controller.onboardingLoading}
+                onSubmitStep={controller.submitOnboardingStep}
+              />
+            )
+          ) : (
+            <OnboardingIntroPanel
+              userName={controller.user?.fullName ?? controller.user?.email}
+              continueLabel="Kirish va davom etish"
+              onContinue={() => {
+                window.localStorage.setItem("auth.pendingIntroSeen", "1");
+                window.location.assign(`/login?verified=1&next=onboarding`);
+              }}
+            />
+          )}
+        </div>
+        <NotificationCenter />
+      </>
+    );
+  }
+
+  if (normalizedPathname === "/onboarding" && !controller.isAuthenticated) {
+    return (
+      <>
+        <SkipLink />
+        <OnboardingIntroPanel
+          onContinue={() => window.location.assign("/login?verified=1&next=onboarding")}
+          continueLabel="Kirish va davom etish"
+        />
+        <NotificationCenter />
+      </>
+    );
+  }
+
+  if (isAuthRoute(normalizedPathname) || !controller.isAuthenticated) {
+    return (
+      <>
+        <SkipLink />
+        <AuthScreen
+          onLogin={controller.login}
+          onRegister={controller.register}
+          onVerifyEmail={controller.verifyEmail}
+          onResendVerification={controller.resendVerification}
+          isLoading={controller.isAuthLoading}
+          isVerifyingEmail={controller.isVerifyingEmail}
+          isResendingVerification={controller.isResendingVerification}
+          errorMessage={controller.authError}
+        />
+        <NotificationCenter />
+      </>
+    );
+  }
+
+  if (controller.showOnboarding) {
+    return (
+      <>
+        <SkipLink />
+        <div className="min-h-screen bg-background px-4 py-10 sm:px-6 lg:px-8">
+          {controller.showOnboardingIntro ? (
+            <OnboardingIntroPanel
+              userName={controller.user?.fullName ?? controller.user?.email}
+              onContinue={controller.continueOnboardingFromIntro}
+            />
+          ) : (
+            <OnboardingPanel
+              isSubmitting={controller.isOnboardingSubmitting}
+              profile={controller.onboardingProfile}
+              isProfileLoading={controller.onboardingLoading}
+              onSubmitStep={controller.submitOnboardingStep}
+            />
+          )}
+        </div>
+        <NotificationCenter />
+      </>
+    );
+  }
+
+  if (controller.workspaceLoading) {
+    return <LoadingState label="O'quv ish maydoni yuklanmoqda..." />;
+  }
+
+  if (controller.workspaceError) {
+    return (
+      <>
+        <SkipLink />
+        <div className="min-h-screen bg-background px-4 py-10 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-2xl">
+            <ErrorState
+              title="Ish maydonini yuklab bo'lmadi"
+              message={getErrorMessage(controller.workspaceError)}
+              action={
+                <Button
+                  type="button"
+                  onClick={() => window.location.reload()}
+                  variant="danger"
+                >
+                  Qayta yuklash
+                </Button>
+              }
+            />
+          </div>
+        </div>
+        <NotificationCenter />
+      </>
+    );
+  }
+
   return (
-    <ThemeProvider attribute="class" defaultTheme="light">
-      <AppContent />
-    </ThemeProvider>
+    <>
+      <SkipLink />
+      <AppShell
+        section={controller.section}
+        onSectionChange={controller.setSection}
+        onSectionPrefetch={preloadSection}
+        user={controller.user}
+        onRefreshCurrentSection={controller.refreshCurrentSection}
+        isRefreshingCurrentSection={controller.isRefreshingCurrentSection}
+        onLogout={controller.logout}
+        isLoggingOut={controller.isLoggingOut}
+      >
+        <SectionErrorBoundary>
+          <Suspense fallback={<LoadingState label="Bo'lim yuklanmoqda..." />}>
+            {controller.section === "dashboard" ? (
+              <DashboardOverview
+                userName={controller.user?.fullName ?? controller.user?.email ?? "Foydalanuvchi"}
+                roadmap={controller.roadmap}
+                tasks={controller.tasks}
+                motivationCard={controller.motivationCard}
+                recommendations={controller.recommendations}
+                recommendationsLoading={controller.recommendationsLoading}
+                recommendationsError={controller.recommendationsError}
+                weeklyPoints={controller.weeklyPoints.map((point) => ({
+                  weekLabel: point.weekLabel,
+                  completedTasks: point.completedTasks,
+                  totalTasks: point.totalTasks,
+                  learningMinutes: point.learningMinutes,
+                  completionRate: point.completionRate,
+                }))}
+                weeklyAverage={controller.weeklyAverage}
+                monthlyAverage={controller.monthlyAverage}
+              />
+            ) : null}
+
+            {controller.section === "roadmap" ? (
+              <RoadmapPanel
+                roadmap={controller.roadmap}
+                isLoading={controller.roadmapLoading}
+                errorMessage={controller.roadmapError}
+                onGenerate={controller.generateRoadmap}
+                isGenerating={controller.isGeneratingRoadmap}
+                onRetry={controller.refetchRoadmap}
+              />
+            ) : null}
+
+            {controller.section === "tasks" ? (
+              <TasksPanel
+                tasks={controller.tasks}
+                dateLabel={controller.dateLabel}
+                isLoading={controller.tasksLoading}
+                errorMessage={controller.tasksError}
+                isCompleting={controller.isCompletingTask}
+                onComplete={controller.completeTask}
+                onRetry={controller.refetchTasks}
+              />
+            ) : null}
+
+            {controller.section === "progress" ? (
+              <ProgressPanel
+                weekly={controller.weeklyPoints.map((point) => ({
+                  label: point.weekLabel,
+                  completionRate: point.completionRate,
+                  completedTasks: point.completedTasks,
+                  totalTasks: point.totalTasks,
+                  learningMinutes: point.learningMinutes,
+                }))}
+                monthly={controller.monthlyPoints.map((point) => ({
+                  label: point.monthLabel,
+                  completionRate: point.completionRate,
+                  completedTasks: point.completedTasks,
+                  totalTasks: point.totalTasks,
+                  learningMinutes: point.learningMinutes,
+                }))}
+                weeklyAverage={controller.weeklyAverage}
+                monthlyAverage={controller.monthlyAverage}
+                isLoading={controller.progressLoading}
+                errorMessage={controller.progressError}
+                onRetry={controller.refetchProgress}
+              />
+            ) : null}
+
+            {controller.section === "motivation" ? (
+              <MotivationPanel
+                card={controller.motivationCard}
+                isLoading={controller.motivationLoading}
+                errorMessage={controller.motivationError}
+                isSendingEvent={controller.isSendingMotivationEvent}
+                onEvent={controller.sendMotivationEvent}
+                onRetry={controller.refetchMotivation}
+              />
+            ) : null}
+          </Suspense>
+        </SectionErrorBoundary>
+      </AppShell>
+      <NotificationCenter />
+    </>
   );
 }

@@ -4,21 +4,22 @@ from unittest.mock import patch
 
 from django.contrib.auth import get_user_model
 from django.core.exceptions import FieldDoesNotExist
+from django.core.cache import cache
 from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIClient
 
-from profiles.models import Profile
-from test_system.models import TestAttempt
+from test_system.models import Goal, StudentProfile
 
 from .exceptions import LLMTimeoutError
+from .views import _task_owner_cache_key
 
 
 User = get_user_model()
 
 
 class GenerateRoadmapAPITests(TestCase):
-    """Tests for roadmap generation endpoint with mocked Gemini calls."""
+    """Tests for roadmap generation endpoint with mocked Groq calls."""
 
     url = "/api/v1/ai/generate/"
 
@@ -39,18 +40,20 @@ class GenerateRoadmapAPITests(TestCase):
 
     def _prepare_user_context(self, email: str) -> User:
         user = self._create_user(email)
-        profile = Profile.objects.get(user=user)
-        profile.current_goal = "Become a backend engineer"
-        profile.english_level = "B1"
-        profile.save(update_fields=["current_goal", "english_level", "updated_at"])
-        TestAttempt.objects.create(user=user, total_score=72)
+        goal = Goal.objects.create(name="Become a backend engineer", slug=f"backend-{email.split('@')[0]}")
+        StudentProfile.objects.create(
+            user=user,
+            goal=goal,
+            english_level="B1",
+            hours_per_day=4,
+        )
         return user
 
-    @patch("ai_engine.services.GeminiProvider.generate_json")
+    @patch("ai_engine.services.GroqProvider.generate_json")
     def test_generate_roadmap_success(self, mock_generate_json):
         mock_generate_json.return_value = {
-            "roadmap_title": "Backend Engineer Path",
-            "summary": "A practical 3-phase backend roadmap.",
+            "title": "Backend Engineer Path",
+            "estimated_months": 4,
             "phases": [
                 {
                     "title": "Fundamentals",
@@ -127,13 +130,13 @@ class GenerateRoadmapAPITests(TestCase):
 
         response = client.post(self.url, {}, format="json")
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["roadmap_title"], "Backend Engineer Path")
-        self.assertEqual(len(response.data["phases"]), 3)
+        self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
+        self.assertIn("task_id", response.data)
+        self.assertEqual(response.data["status"], "queued")
 
-    @patch("ai_engine.services.GeminiProvider.generate_json")
+    @patch("ai_engine.services.GroqProvider.generate_json")
     def test_generate_roadmap_timeout_returns_502(self, mock_generate_json):
-        mock_generate_json.side_effect = LLMTimeoutError("Gemini request timed out.")
+        mock_generate_json.side_effect = LLMTimeoutError("Groq request timed out.")
 
         user = self._prepare_user_context("ai-timeout@example.com")
         client = APIClient()
@@ -144,7 +147,7 @@ class GenerateRoadmapAPITests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_502_BAD_GATEWAY)
         self.assertIn("detail", response.data)
 
-    @patch("ai_engine.services.GeminiProvider.generate_json")
+    @patch("ai_engine.services.GroqProvider.generate_json")
     def test_generate_roadmap_invalid_json_returns_400(self, mock_generate_json):
         mock_generate_json.return_value = {"unexpected": "schema"}
 
@@ -177,12 +180,8 @@ class GenerateRoadmapAPITests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_generate_roadmap_without_test_attempt_returns_400(self):
-        """Test missing aptitude attempt is rejected before Celery execution."""
+        """Test missing StudentProfile is rejected before Celery execution."""
         user = self._create_user("ai-no-attempt@example.com")
-        profile = Profile.objects.get(user=user)
-        profile.current_goal = "Become a backend engineer"
-        profile.english_level = "B1"
-        profile.save(update_fields=["current_goal", "english_level", "updated_at"])
 
         client = APIClient()
         client.force_authenticate(user=user)
@@ -228,6 +227,7 @@ class RoadmapTaskStatusAPITests(TestCase):
         client.force_authenticate(user=user)
 
         task_id = "11111111-1111-1111-1111-111111111111"
+        cache.set(_task_owner_cache_key(task_id), user.id, timeout=60)
         response = client.get(self.status_url.format(task_id=task_id))
 
         self.assertEqual(response.status_code, status.HTTP_503_SERVICE_UNAVAILABLE)

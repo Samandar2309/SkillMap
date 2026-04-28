@@ -97,12 +97,12 @@ export const api = {
     ),
 
   generateRoadmap: (token: string) =>
-    request<GenerateRoadmapResponse>('/ai/generate/', { method: 'POST' }, token),
+    request<GenerateRoadmapResponse>('/roadmaps/generate', { method: 'POST' }, token),
 
   roadmapTaskStatus: (token: string, taskId: string) =>
     request<RoadmapTaskStatus>(`/ai/tasks/${taskId}/`, { method: 'GET' }, token),
 
-  getRoadmap: (token: string) => request<Roadmap>('/roadmaps/me/', { method: 'GET' }, token),
+  getRoadmap: (token: string) => request<Roadmap>('/roadmaps/active', { method: 'GET' }, token),
 
   updateTask: (token: string, taskId: number, isCompleted: boolean) =>
     request('/roadmaps/tasks/' + taskId + '/', {

@@ -19,6 +19,25 @@ class RecommendationService:
 
     LEVEL_RANK = {"A1": 1, "A2": 2, "B1": 3, "B2": 4, "C1": 5, "C2": 6}
     DEFAULT_DIRECTION = "general"
+    DIRECTION_ALIASES = {
+        "backend": "backend",
+        "api": "backend",
+        "server": "backend",
+        "server-side": "backend",
+        "django": "backend",
+        "python backend": "backend",
+        "frontend": "frontend",
+        "ui": "frontend",
+        "ux": "frontend",
+        "web": "frontend",
+        "react": "frontend",
+        "javascript": "frontend",
+        "data": "data science",
+        "data science": "data science",
+        "datascience": "data science",
+        "ml": "data science",
+        "machine learning": "data science",
+    }
 
     DEFAULT_CATALOG: list[dict[str, Any]] = [
         {
@@ -121,7 +140,14 @@ class RecommendationService:
     def _normalize_direction(self, direction: str | None) -> str:
         """Normalize and clean direction string."""
         value = (direction or "").strip().lower()
-        return value if value else self.DEFAULT_DIRECTION
+        if not value:
+            return self.DEFAULT_DIRECTION
+
+        for key, canonical in self.DIRECTION_ALIASES.items():
+            if key == value or key in value:
+                return canonical
+
+        return value
 
     def _is_level_match(self, user_level: str, min_level: str, max_level: str) -> bool:
         """Check if user level is within resource's level range."""
@@ -168,12 +194,22 @@ class RecommendationService:
         Raises:
             ValueError: If user has no profile
         """
-        profile = getattr(user, "profile", None)
-        if profile is None:
+        onboarding_profile = getattr(user, "onboarding_profile", None)
+        legacy_profile = getattr(user, "profile", None)
+
+        if onboarding_profile is None and legacy_profile is None:
             raise ValueError("Profile does not exist for the current user.")
 
-        direction = self._normalize_direction(profile.direction)
-        level = self._normalize_level(profile.english_level)
+        direction_source = ""
+        if onboarding_profile is not None:
+            direction_source = str(getattr(onboarding_profile, "domain", "") or "")
+        if not direction_source and legacy_profile is not None:
+            direction_source = str(getattr(legacy_profile, "direction", "") or "")
+
+        level_source = getattr(legacy_profile, "english_level", None) if legacy_profile is not None else None
+
+        direction = self._normalize_direction(direction_source)
+        level = self._normalize_level(level_source)
 
         logger.debug(
             f"Fetching recommendations for user {user.id}: direction={direction}, level={level}"
