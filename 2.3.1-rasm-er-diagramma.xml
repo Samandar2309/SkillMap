@@ -1,0 +1,167 @@
+<mxfile host="app.diagrams.net" modified="2026-05-13T15:30:00.000Z" agent="SkillMap" version="24.0.0">
+  <diagram name="SkillMap ER-Diagram" id="er-diagram-2-3-1">
+    <mxGraphModel dx="1422" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1200" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- TITLE -->
+        <mxCell id="title" value="2.3.1-rasm. SkillMap ma'lumotlar bazasi ER-diagrammasi" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="400" y="20" width="800" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- ========== USER (CENTER) ========== -->
+        <mxCell id="user" value="&lt;b&gt;accounts_user&lt;/b&gt;&#xa;&#xa;PK id (BIGSERIAL)&#xa;email VARCHAR(254) UNIQUE&#xa;password VARCHAR(128)&#xa;is_verified BOOL&#xa;is_active BOOL&#xa;date_joined TIMESTAMP&#xa;created_at TIMESTAMP" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="700" y="500" width="220" height="160" as="geometry" />
+        </mxCell>
+
+        <!-- ========== USER PROFILE (TOP LEFT) ========== -->
+        <mxCell id="profile" value="&lt;b&gt;onboarding_userprofile&lt;/b&gt;&#xa;&#xa;PK id&#xa;FK user_id (1:1 UNIQUE)&#xa;full_name VARCHAR(255)&#xa;goal VARCHAR(255)&#xa;domain VARCHAR(255)&#xa;level VARCHAR(20)&#xa;target_months INT&#xa;daily_minutes INT&#xa;weekly_days INT&#xa;motivation TEXT&#xa;content_types TEXT&#xa;skill_test_data JSONB&#xa;preferred_slots TEXT&#xa;lesson_format VARCHAR(20)&#xa;... (40 maydon jami)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;" vertex="1" parent="1">
+          <mxGeometry x="200" y="120" width="240" height="280" as="geometry" />
+        </mxCell>
+
+        <!-- ========== ROADMAP (TOP CENTER) ========== -->
+        <mxCell id="roadmap" value="&lt;b&gt;learning_roadmap_roadmap&lt;/b&gt;&#xa;&#xa;PK id&#xa;FK user_id (1:N)&#xa;title VARCHAR(255)&#xa;duration_months INT&#xa;difficulty VARCHAR(20)&#xa;is_active BOOL&#xa;source_payload JSONB&#xa;adaptation_reason VARCHAR(255)&#xa;regenerated_at TIMESTAMP&#xa;created_at TIMESTAMP" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;" vertex="1" parent="1">
+          <mxGeometry x="680" y="120" width="240" height="200" as="geometry" />
+        </mxCell>
+
+        <!-- ========== ROADMAP MONTH (TOP RIGHT) ========== -->
+        <mxCell id="month" value="&lt;b&gt;learning_roadmap_roadmapmonth&lt;/b&gt;&#xa;&#xa;PK id&#xa;FK roadmap_id (1:N)&#xa;month INT&#xa;topics TEXT&#xa;ai_tasks_payload JSONB" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;" vertex="1" parent="1">
+          <mxGeometry x="1180" y="120" width="240" height="140" as="geometry" />
+        </mxCell>
+
+        <!-- ========== TASK ========== -->
+        <mxCell id="task" value="&lt;b&gt;learning_tasks_task&lt;/b&gt;&#xa;&#xa;PK id&#xa;FK user_id&#xa;FK roadmap_id&#xa;FK roadmap_month_id (1:N)&#xa;title VARCHAR(255)&#xa;description TEXT&#xa;estimated_time_minutes INT&#xa;status VARCHAR(20)&#xa;ai_payload JSONB&#xa;tests JSONB&#xa;quiz_questions JSONB&#xa;quiz_difficulty REAL&#xa;quiz_generated_at TIMESTAMP&#xa;order INT" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;" vertex="1" parent="1">
+          <mxGeometry x="1180" y="320" width="240" height="240" as="geometry" />
+        </mxCell>
+
+        <!-- ========== DAILY TASK ========== -->
+        <mxCell id="dailytask" value="&lt;b&gt;learning_tasks_dailytask&lt;/b&gt;&#xa;&#xa;PK id&#xa;FK user_id&#xa;FK task_id (1:N)&#xa;scheduled_date DATE&#xa;planned_time_minutes INT&#xa;actual_time_minutes INT&#xa;completion_status VARCHAR(20)&#xa;completed_at TIMESTAMP" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;" vertex="1" parent="1">
+          <mxGeometry x="1180" y="620" width="240" height="180" as="geometry" />
+        </mxCell>
+
+        <!-- ========== QUIZ ATTEMPT ========== -->
+        <mxCell id="quiz" value="&lt;b&gt;learning_tasks_dailyquizattempt&lt;/b&gt;&#xa;&#xa;PK id&#xa;FK user_id&#xa;FK daily_task_id (1:N)&#xa;answers JSONB&#xa;score SMALLINT&#xa;passed BOOL&#xa;difficulty REAL&#xa;created_at TIMESTAMP" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;" vertex="1" parent="1">
+          <mxGeometry x="1180" y="860" width="240" height="160" as="geometry" />
+        </mxCell>
+
+        <!-- ========== ACTIVITY LOG ========== -->
+        <mxCell id="activity" value="&lt;b&gt;learning_analytics_activitylog&lt;/b&gt;&#xa;&#xa;PK id&#xa;FK user_id (1:N)&#xa;action VARCHAR(50)&#xa;entity_type VARCHAR(50)&#xa;entity_id VARCHAR(64)&#xa;metadata JSONB&#xa;created_at TIMESTAMP" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;" vertex="1" parent="1">
+          <mxGeometry x="200" y="500" width="240" height="160" as="geometry" />
+        </mxCell>
+
+        <!-- ========== STREAK ========== -->
+        <mxCell id="streak" value="&lt;b&gt;learning_analytics_learningstreak&lt;/b&gt;&#xa;&#xa;PK id&#xa;FK user_id (1:1)&#xa;current_streak INT&#xa;longest_streak INT&#xa;last_activity_date DATE&#xa;updated_at TIMESTAMP" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;" vertex="1" parent="1">
+          <mxGeometry x="200" y="700" width="240" height="160" as="geometry" />
+        </mxCell>
+
+        <!-- ========== USER PROGRESS ========== -->
+        <mxCell id="progress" value="&lt;b&gt;learning_analytics_userprogress&lt;/b&gt;&#xa;&#xa;PK id&#xa;FK user_id (1:1)&#xa;progress_percentage REAL&#xa;completion_rate REAL&#xa;time_accuracy REAL&#xa;consistency_score REAL&#xa;weekly_performance REAL&#xa;performance_level VARCHAR(20)&#xa;last_calculated_at TIMESTAMP" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;" vertex="1" parent="1">
+          <mxGeometry x="200" y="900" width="240" height="200" as="geometry" />
+        </mxCell>
+
+        <!-- ========== MOTIVATION LOG ========== -->
+        <mxCell id="motivation" value="&lt;b&gt;learning_analytics_motivationlog&lt;/b&gt;&#xa;&#xa;PK id&#xa;FK user_id (1:N)&#xa;message TEXT&#xa;channel VARCHAR(20)&#xa;ai_provider VARCHAR(20)&#xa;sent_at TIMESTAMP" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;" vertex="1" parent="1">
+          <mxGeometry x="700" y="780" width="240" height="160" as="geometry" />
+        </mxCell>
+
+        <!-- ========== RELATIONSHIPS ========== -->
+
+        <!-- User → Profile (1:1) -->
+        <mxCell id="r1" value="1:1" style="endArrow=ERmany;startArrow=ERone;html=1;rounded=0;strokeWidth=2;fontSize=11;fontStyle=1;" edge="1" parent="1" source="user" target="profile">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- User → Roadmap (1:N) -->
+        <mxCell id="r2" value="1:N" style="endArrow=ERmany;startArrow=ERone;html=1;rounded=0;strokeWidth=2;fontSize=11;fontStyle=1;" edge="1" parent="1" source="user" target="roadmap">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Roadmap → Month (1:N) -->
+        <mxCell id="r3" value="1:N" style="endArrow=ERmany;startArrow=ERone;html=1;rounded=0;strokeWidth=2;fontSize=11;fontStyle=1;" edge="1" parent="1" source="roadmap" target="month">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Month → Task (1:N) -->
+        <mxCell id="r4" value="1:N" style="endArrow=ERmany;startArrow=ERone;html=1;rounded=0;strokeWidth=2;fontSize=11;fontStyle=1;" edge="1" parent="1" source="month" target="task">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Task → DailyTask (1:N) -->
+        <mxCell id="r5" value="1:N" style="endArrow=ERmany;startArrow=ERone;html=1;rounded=0;strokeWidth=2;fontSize=11;fontStyle=1;" edge="1" parent="1" source="task" target="dailytask">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- DailyTask → Quiz (1:N) -->
+        <mxCell id="r6" value="1:N" style="endArrow=ERmany;startArrow=ERone;html=1;rounded=0;strokeWidth=2;fontSize=11;fontStyle=1;" edge="1" parent="1" source="dailytask" target="quiz">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- User → ActivityLog (1:N) -->
+        <mxCell id="r7" value="1:N" style="endArrow=ERmany;startArrow=ERone;html=1;rounded=0;strokeWidth=2;fontSize=11;fontStyle=1;" edge="1" parent="1" source="user" target="activity">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- User → Streak (1:1) -->
+        <mxCell id="r8" value="1:1" style="endArrow=ERmany;startArrow=ERone;html=1;rounded=0;strokeWidth=2;fontSize=11;fontStyle=1;" edge="1" parent="1" source="user" target="streak">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- User → Progress (1:1) -->
+        <mxCell id="r9" value="1:1" style="endArrow=ERmany;startArrow=ERone;html=1;rounded=0;strokeWidth=2;fontSize=11;fontStyle=1;" edge="1" parent="1" source="user" target="progress">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- User → Motivation (1:N) -->
+        <mxCell id="r10" value="1:N" style="endArrow=ERmany;startArrow=ERone;html=1;rounded=0;strokeWidth=2;fontSize=11;fontStyle=1;" edge="1" parent="1" source="user" target="motivation">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ========== LEGEND ========== -->
+        <mxCell id="legend" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="500" y="700" width="200" height="200" as="geometry" />
+        </mxCell>
+
+        <mxCell id="legend_t" value="IZOH (Legend)" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="500" y="710" width="200" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="l1" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="515" y="740" width="20" height="15" as="geometry" />
+        </mxCell>
+        <mxCell id="l1t" value="User (markaziy)" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="540" y="738" width="150" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="l2" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="515" y="765" width="20" height="15" as="geometry" />
+        </mxCell>
+        <mxCell id="l2t" value="Onboarding profili" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="540" y="763" width="150" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="l3" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="515" y="790" width="20" height="15" as="geometry" />
+        </mxCell>
+        <mxCell id="l3t" value="Roadmap hierarchy" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="540" y="788" width="150" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="l4" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="515" y="815" width="20" height="15" as="geometry" />
+        </mxCell>
+        <mxCell id="l4t" value="Tasks va quizzes" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="540" y="813" width="150" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="l5" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="515" y="840" width="20" height="15" as="geometry" />
+        </mxCell>
+        <mxCell id="l5t" value="Analytics" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="540" y="838" width="150" height="20" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
