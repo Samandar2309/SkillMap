@@ -1,0 +1,320 @@
+<mxfile host="app.diagrams.net" modified="2026-05-18T14:00:00.000Z" agent="SkillMap" version="24.0.0">
+  <diagram name="Backend kod tashkili" id="backend-code-structure-3-2-1">
+    <mxGraphModel dx="1422" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1500" pageHeight="1200" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- TITLE -->
+        <mxCell id="title" value="3.2.1-rasm. Backend kod tashkili: apps/ → services/ → ai_engine/ qatlamlari va ular orasidagi bog'lanishlar" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="20" width="1300" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="subtitle" value="Mas'uliyatlarni ajratish (separation of concerns) prinsipiga muvofiq uch qatlamli struktura" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=2;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="200" y="60" width="1100" height="25" as="geometry" />
+        </mxCell>
+
+        <!-- ========== LAYER LABEL: HTTP ========== -->
+        <mxCell id="http_label" value="HTTP qatlami (URL, view, serializer)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontStyle=2;fontColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="80" y="105" width="350" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- ========== APPS/ QATLAMI (TOP) ========== -->
+        <mxCell id="apps_container" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=3;dashed=0;" vertex="1" parent="1">
+          <mxGeometry x="80" y="130" width="1340" height="160" as="geometry" />
+        </mxCell>
+
+        <mxCell id="apps_title" value="📁 apps/ — Django ilovalari (6 ta)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=15;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="140" width="1340" height="25" as="geometry" />
+        </mxCell>
+
+        <mxCell id="app_users" value="📦 apps/users&#xa;&#xa;Foydalanuvchi modeli,&#xa;autentifikatsiya,&#xa;email tasdiqlash" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;fontSize=11;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="100" y="175" width="200" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="app_onboarding" value="📦 apps/onboarding&#xa;&#xa;Sakkiz bosqichli&#xa;kirish anketasi (40 maydon),&#xa;v2 versiyasi" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;fontSize=11;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="320" y="175" width="210" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="app_roadmap" value="📦 apps/roadmap&#xa;&#xa;Yo'l xarita modeli,&#xa;Roadmap → Month,&#xa;generation jobs" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;fontSize=11;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="550" y="175" width="200" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="app_tasks" value="📦 apps/tasks&#xa;&#xa;Task, DailyTask,&#xa;DailyQuizAttempt,&#xa;kunlik bajarish" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;fontSize=11;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="770" y="175" width="200" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="app_analytics" value="📦 apps/analytics&#xa;&#xa;ActivityLog,&#xa;LearningStreak,&#xa;UserProgress" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;fontSize=11;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="990" y="175" width="200" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="app_ai" value="📦 apps/ai&#xa;&#xa;AI endpointlari:&#xa;/api/v1/ai/analyze&#xa;/api/v1/ai/motivate" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;fontSize=11;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1210" y="175" width="190" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- ========== LAYER LABEL: BUSINESS LOGIC ========== -->
+        <mxCell id="services_label" value="Biznes mantiq qatlami (amaliy mantiq, validatsiya, hisobotlar)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontStyle=2;fontColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="80" y="320" width="500" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- ========== SERVICES/ QATLAMI (MIDDLE) ========== -->
+        <mxCell id="services_container" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=3;" vertex="1" parent="1">
+          <mxGeometry x="80" y="345" width="1340" height="280" as="geometry" />
+        </mxCell>
+
+        <mxCell id="services_title" value="🛠️ services/ — Biznes-mantiq yig'masi (16 modul)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=15;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="355" width="1340" height="25" as="geometry" />
+        </mxCell>
+
+        <!-- Services grid: 4 columns x 4 rows -->
+        <mxCell id="svc_ai_gen" value="📄 ai_generator.py&#xa;Yo'l xarita generatsiyasi" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d6b656;fontSize=10;align=center;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="390" width="200" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="svc_week_gen" value="📄 week_generator_service.py&#xa;Haftalik vazifa generatsiyasi" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d6b656;fontSize=10;align=center;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="320" y="390" width="220" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="svc_roadmap_overview" value="📄 roadmap_overview_service.py&#xa;Yo'l xarita umumiy ko'rinishi" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d6b656;fontSize=10;align=center;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="560" y="390" width="230" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="svc_task" value="📄 task_service.py&#xa;Kunlik vazifa hayot davri" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d6b656;fontSize=10;align=center;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="810" y="390" width="200" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="svc_quiz" value="📄 quiz_service.py&#xa;Mini-test infratuzilmasi" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d6b656;fontSize=10;align=center;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="390" width="200" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="svc_fallback" value="📄 fallback_generator.py&#xa;Zaxira shablon yaratish" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d6b656;fontSize=10;align=center;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="1240" y="390" width="170" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="svc_validator" value="📄 validator.py&#xa;Semantik tekshiruv" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d6b656;fontSize=10;align=center;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="455" width="200" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="svc_motivation" value="📄 motivation_service.py&#xa;AI motivatsion xabarlar" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d6b656;fontSize=10;align=center;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="320" y="455" width="220" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="svc_streak" value="📄 streak_service.py&#xa;Ketma-ket faollik kuzatuvi" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d6b656;fontSize=10;align=center;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="560" y="455" width="230" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="svc_analytics" value="📄 analytics_service.py&#xa;Hisobot va statistika" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d6b656;fontSize=10;align=center;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="810" y="455" width="200" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="svc_progress" value="📄 progress_tracker.py&#xa;Taraqqiyot KPI hisoblash" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d6b656;fontSize=10;align=center;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="455" width="200" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="svc_retry" value="📄 retry_engine.py&#xa;Qayta urinish, backoff" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d6b656;fontSize=10;align=center;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="1240" y="455" width="170" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="svc_universal_prompt" value="📄 universal_prompt.py&#xa;Prompt shablon to'plami" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d6b656;fontSize=10;align=center;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="520" width="200" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="svc_roadmap" value="📄 roadmap_service.py&#xa;Yo'l xarita boshqaruvi" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d6b656;fontSize=10;align=center;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="320" y="520" width="220" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="svc_grok" value="📄 grok_service.py&#xa;Groq integratsiya xizmati" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d6b656;fontSize=10;align=center;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="560" y="520" width="230" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="svc_prompt_update" value="📄 prompt_update.py&#xa;Prompt shablon yangilash" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d6b656;fontSize=10;align=center;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="810" y="520" width="200" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="svc_pydantic" value="📄 pydantic_schemas.py&#xa;JSON schema modellari" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d6b656;fontSize=10;align=center;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="520" width="200" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- ========== LAYER LABEL: AI INTEGRATION ========== -->
+        <mxCell id="ai_engine_label" value="AI integratsiya qatlami (LLM xizmatlar, anti-gallyutsinatsiya, marshrutlash)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontStyle=2;fontColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="80" y="655" width="600" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- ========== AI_ENGINE/ QATLAMI (BOTTOM) ========== -->
+        <mxCell id="ai_engine_container" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;strokeWidth=3;" vertex="1" parent="1">
+          <mxGeometry x="80" y="680" width="1340" height="180" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ai_engine_title" value="🧠 ai_engine/ — AI integratsiya paketi (5 modul + tashqi xizmatlar)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=15;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="690" width="1340" height="25" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ai_router" value="📄 router.py&#xa;&#xa;LLMRouter klassi&#xa;Provayder tartiblash&#xa;Xato vaqtida fallback" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#9673a6;fontSize=10;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="100" y="725" width="240" height="115" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ai_providers" value="📄 providers.py&#xa;&#xa;BaseLLMProvider abstrakt&#xa;GroqProvider, GeminiProvider&#xa;chat(prompt, model, options)&#xa;→ ProviderResponse" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#9673a6;fontSize=10;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="360" y="725" width="260" height="115" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ai_anti" value="📄 anti.py&#xa;&#xa;Anti-gallyutsinatsiya filtri&#xa;Hedge so'zlar, placeholder,&#xa;shubhali URL aniqlash&#xa;3 darajali jiddiylik" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#9673a6;fontSize=10;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="640" y="725" width="240" height="115" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ai_exceptions" value="📄 exceptions.py&#xa;&#xa;Xato sinflari iyerarxiyasi:&#xa;LLMError → LLMAuthError,&#xa;LLMTimeoutError,&#xa;RateLimitError, ..." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#9673a6;fontSize=10;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="900" y="725" width="240" height="115" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ai_services" value="📄 services.py&#xa;&#xa;Yuqori darajadagi&#xa;AI yordamchi funksiyalar&#xa;(facade pattern)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#9673a6;fontSize=10;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1160" y="725" width="240" height="115" as="geometry" />
+        </mxCell>
+
+        <!-- ========== ARROWS: apps → services ========== -->
+        <mxCell id="arr_users_svc" style="endArrow=block;html=1;rounded=0;strokeWidth=2;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.1;entryY=0;entryDx=0;entryDy=0;strokeColor=#6c8ebf;" edge="1" parent="1" source="app_users" target="services_container">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="arr_roadmap_svc" style="endArrow=block;html=1;rounded=0;strokeWidth=2;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.4;entryY=0;entryDx=0;entryDy=0;strokeColor=#6c8ebf;" edge="1" parent="1" source="app_roadmap" target="services_container">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="arr_tasks_svc" style="endArrow=block;html=1;rounded=0;strokeWidth=2;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.6;entryY=0;entryDx=0;entryDy=0;strokeColor=#6c8ebf;" edge="1" parent="1" source="app_tasks" target="services_container">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="arr_analytics_svc" style="endArrow=block;html=1;rounded=0;strokeWidth=2;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.8;entryY=0;entryDx=0;entryDy=0;strokeColor=#6c8ebf;" edge="1" parent="1" source="app_analytics" target="services_container">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ========== ARROWS: services → ai_engine ========== -->
+        <mxCell id="arr_aigen_router" value="LLM so'rovlar" style="endArrow=block;html=1;rounded=0;strokeWidth=2;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;fontSize=10;strokeColor=#9673a6;" edge="1" parent="1" source="svc_ai_gen" target="ai_router">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="arr_quiz_router" style="endArrow=block;html=1;rounded=0;strokeWidth=2;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;strokeColor=#9673a6;" edge="1" parent="1" source="svc_quiz" target="ai_providers">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="arr_motivation_router" style="endArrow=block;html=1;rounded=0;strokeWidth=2;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;strokeColor=#9673a6;" edge="1" parent="1" source="svc_motivation" target="ai_anti">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="arr_retry_router" style="endArrow=block;html=1;rounded=0;strokeWidth=2;dashed=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;strokeColor=#9673a6;" edge="1" parent="1" source="svc_retry" target="ai_services">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ========== DIRECT: apps/ai → ai_engine (bypass services) ========== -->
+        <mxCell id="arr_appsai_aiengine" value="to'g'ridan-to'g'ri AI endpointlar" style="endArrow=block;html=1;rounded=0;strokeWidth=2;dashed=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;fontSize=10;fontStyle=2;strokeColor=#9673a6;fontColor=#9673a6;" edge="1" parent="1" source="app_ai" target="ai_engine_container">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1450" y="225" />
+              <mxPoint x="1450" y="700" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ========== EXTERNAL: AI providers ========== -->
+        <mxCell id="external_groq" value="🌐 Groq Cloud&#xa;Llama 3.3 70B Versatile" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=11;fontStyle=1;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="200" y="900" width="240" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="external_gemini" value="🌐 Google Gemini&#xa;1.5 Flash (google-genai SDK)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontSize=11;fontStyle=1;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="480" y="900" width="240" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="external_db" value="🗄️ PostgreSQL 17&#xa;skillmap database (42 jadval)" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;fontStyle=1;strokeWidth=2;align=center;" vertex="1" parent="1">
+          <mxGeometry x="760" y="895" width="240" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="external_front" value="🖥️ front/ (alohida ish maydoni)&#xa;React + TypeScript + Vite 6.4.2" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#cce5ff;strokeColor=#36393d;fontSize=11;fontStyle=1;strokeWidth=2;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="900" width="300" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Arrows from ai_engine to external -->
+        <mxCell id="arr_router_groq" style="endArrow=block;html=1;rounded=0;strokeWidth=2;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#9673a6;" edge="1" parent="1" source="ai_router" target="external_groq">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="arr_providers_gemini" style="endArrow=block;html=1;rounded=0;strokeWidth=2;dashed=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#9673a6;" edge="1" parent="1" source="ai_providers" target="external_gemini">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Apps → Database (ORM) -->
+        <mxCell id="arr_apps_db" value="Django ORM (psycopg2)" style="endArrow=block;html=1;rounded=0;strokeWidth=2;dashed=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;fontSize=10;fontStyle=2;strokeColor=#82B366;fontColor=#82B366;" edge="1" parent="1" source="apps_container" target="external_db">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1460" y="220" />
+              <mxPoint x="880" y="220" />
+              <mxPoint x="880" y="880" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ========== LEGEND ========== -->
+        <mxCell id="legend_box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="1010" width="1300" height="160" as="geometry" />
+        </mxCell>
+
+        <mxCell id="legend_title" value="IZOH (Legend) — uch qatlamli kod tashkili" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=13;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="1018" width="1300" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- Legend column 1: Layers -->
+        <mxCell id="leg1_color" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="130" y="1055" width="30" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="leg1_text" value="&lt;b&gt;apps/&lt;/b&gt; — HTTP qatlami (URL, view, serializer, model)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="170" y="1053" width="500" height="22" as="geometry" />
+        </mxCell>
+
+        <mxCell id="leg2_color" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="130" y="1085" width="30" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="leg2_text" value="&lt;b&gt;services/&lt;/b&gt; — Biznes-mantiq qatlami (16 modul, amaliy mantiq)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="170" y="1083" width="500" height="22" as="geometry" />
+        </mxCell>
+
+        <mxCell id="leg3_color" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="130" y="1115" width="30" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="leg3_text" value="&lt;b&gt;ai_engine/&lt;/b&gt; — AI integratsiya qatlami (5 modul, LLM bilan aloqa)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="170" y="1113" width="500" height="22" as="geometry" />
+        </mxCell>
+
+        <!-- Legend column 2: External -->
+        <mxCell id="leg4_color" value="" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="730" y="1055" width="30" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="leg4_text" value="&lt;b&gt;Tashqi xizmatlar&lt;/b&gt; — Groq Cloud, Google Gemini (LLM provayderlar)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="770" y="1053" width="600" height="22" as="geometry" />
+        </mxCell>
+
+        <mxCell id="leg5_color" value="" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="730" y="1085" width="30" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="leg5_text" value="&lt;b&gt;Ma'lumotlar bazasi&lt;/b&gt; — PostgreSQL 17 (42 jadval, real ma'lumotlar)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="770" y="1083" width="600" height="22" as="geometry" />
+        </mxCell>
+
+        <mxCell id="leg6_color" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#cce5ff;strokeColor=#36393d;" vertex="1" parent="1">
+          <mxGeometry x="730" y="1115" width="30" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="leg6_text" value="&lt;b&gt;front/&lt;/b&gt; — alohida frontend ish maydoni (React + TypeScript + Vite)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="770" y="1113" width="600" height="22" as="geometry" />
+        </mxCell>
+
+        <!-- Arrow types -->
+        <mxCell id="leg_arr_title" value="O'qlar:" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="130" y="1145" width="100" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="leg_arr1" value="── To'g'ridan-to'g'ri chaqirish (synchronous call)" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="190" y="1145" width="500" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="leg_arr2" value="┄┄ Yon-yo'l aloqa, fallback yoki asinxron chaqiriq" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="730" y="1145" width="500" height="20" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
