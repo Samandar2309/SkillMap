@@ -1,0 +1,167 @@
+<mxfile host="app.diagrams.net" modified="2026-05-18T14:30:00.000Z" agent="SkillMap" version="24.0.0">
+  <diagram name="Lighthouse audit natijalari" id="lighthouse-audit-3-3-1">
+    <mxGraphModel dx="1600" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- TITLE -->
+        <mxCell id="title" value="3.3.1-rasm. Lighthouse audit natijalari — to‘rtta kategoriya bo‘yicha rangli ball diagrammasi" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="160" y="20" width="1280" height="36" as="geometry" />
+        </mxCell>
+
+        <mxCell id="subtitle" value="Audit production build ustida, mobil profil bilan o‘tkazildi. Vite 6.4.2 yordamida 2 171 modul 6,97 sekundda transformatsiya qilindi; backend ishga tushirilmagan static audit sharoiti Performance ballini pasaytiradi." style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=2;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="170" y="58" width="1260" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- MAIN CONTAINER -->
+        <mxCell id="container" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#c7c7c7;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="80" y="120" width="1440" height="760" as="geometry" />
+        </mxCell>
+
+        <mxCell id="container_title" value="Lighthouse category score chart" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=13;fontStyle=1;fontColor=#555555;" vertex="1" parent="1">
+          <mxGeometry x="520" y="132" width="560" height="24" as="geometry" />
+        </mxCell>
+
+        <mxCell id="header_chip_1" value="Mobile profile" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0f8ff;strokeColor=#9ec5fe;strokeWidth=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="120" y="170" width="120" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="header_chip_2" value="Production build" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f7f7f7;strokeColor=#cfd4da;strokeWidth=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="250" y="170" width="130" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="header_chip_3" value="Backend off" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3cd;strokeColor=#f0c36d;strokeWidth=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="390" y="170" width="110" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="header_chip_4" value="Vite 6.4.2 · 2 171 modul · 6,97 s" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f4f0ff;strokeColor=#c9b6ff;strokeWidth=1;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="520" y="170" width="250" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="axis_left" value="0" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#999999;" vertex="1" parent="1">
+          <mxGeometry x="355" y="212" width="20" height="18" as="geometry" />
+        </mxCell>
+
+        <mxCell id="axis_right" value="100" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#999999;" vertex="1" parent="1">
+          <mxGeometry x="1275" y="212" width="30" height="18" as="geometry" />
+        </mxCell>
+
+        <!-- PERFORMANCE ROW -->
+        <mxCell id="perf_label" value="&lt;b&gt;Performance&lt;/b&gt;&#xa;Static audit sharoiti sabab yuklanish og‘irroq" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=14;fontColor=#b15f00;" vertex="1" parent="1">
+          <mxGeometry x="120" y="250" width="220" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="perf_bar_bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f1f3f5;strokeColor=#d8dde3;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="360" y="258" width="900" height="26" as="geometry" />
+        </mxCell>
+
+        <mxCell id="perf_bar_fill" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f59f00;strokeColor=#f59f00;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="360" y="258" width="531" height="26" as="geometry" />
+        </mxCell>
+
+        <mxCell id="perf_score" value="59/100" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f59f00;strokeColor=#d97706;strokeWidth=2;fontSize=16;fontStyle=1;fontColor=#ffffff;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1290" y="244" width="86" height="54" as="geometry" />
+        </mxCell>
+
+        <mxCell id="perf_note" value="Lokal auditda backend ishlatilmaganligi sababli server javoblari yetib kelmaydi va performance balli nisbatan past chiqadi." style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=11;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="360" y="289" width="1010" height="34" as="geometry" />
+        </mxCell>
+
+        <!-- ACCESSIBILITY ROW -->
+        <mxCell id="acc_label" value="&lt;b&gt;Accessibility&lt;/b&gt;&#xa;Radix UI + semantik HTML" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=14;fontColor=#1b7f3a;" vertex="1" parent="1">
+          <mxGeometry x="120" y="350" width="220" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="acc_bar_bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f1f3f5;strokeColor=#d8dde3;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="360" y="358" width="900" height="26" as="geometry" />
+        </mxCell>
+
+        <mxCell id="acc_bar_fill" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2f9e44;strokeColor=#2f9e44;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="360" y="358" width="873" height="26" as="geometry" />
+        </mxCell>
+
+        <mxCell id="acc_score" value="97/100" style="ellipse;whiteSpace=wrap;html=1;fillColor=#2f9e44;strokeColor=#1b7f3a;strokeWidth=2;fontSize=16;fontStyle=1;fontColor=#ffffff;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1290" y="344" width="86" height="54" as="geometry" />
+        </mxCell>
+
+        <mxCell id="acc_note" value="Semantik teglar, to‘g‘ri kontrast va kirish imkoniyati bo‘yicha yaxshi natija." style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=11;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="360" y="389" width="1010" height="34" as="geometry" />
+        </mxCell>
+
+        <!-- BEST PRACTICES ROW -->
+        <mxCell id="bp_label" value="&lt;b&gt;Best Practices&lt;/b&gt;&#xa;Zamonaviy API va xavfsiz amaliyotlar" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=14;fontColor=#2f6fed;" vertex="1" parent="1">
+          <mxGeometry x="120" y="450" width="220" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="bp_bar_bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f1f3f5;strokeColor=#d8dde3;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="360" y="458" width="900" height="26" as="geometry" />
+        </mxCell>
+
+        <mxCell id="bp_bar_fill" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4c6ef5;strokeColor=#4c6ef5;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="360" y="458" width="864" height="26" as="geometry" />
+        </mxCell>
+
+        <mxCell id="bp_score" value="96/100" style="ellipse;whiteSpace=wrap;html=1;fillColor=#4c6ef5;strokeColor=#2f55c5;strokeWidth=2;fontSize=16;fontStyle=1;fontColor=#ffffff;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1290" y="444" width="86" height="54" as="geometry" />
+        </mxCell>
+
+        <mxCell id="bp_note" value="Zamonaviy API qo‘llanmasi, xavfsiz amaliyotlar va toza arxitektura sababli ball yuqori." style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=11;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="360" y="489" width="1010" height="34" as="geometry" />
+        </mxCell>
+
+        <!-- SEO ROW -->
+        <mxCell id="seo_label" value="&lt;b&gt;SEO&lt;/b&gt;&#xa;Meta tag va strukturali markup" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=14;fontColor=#ad7a00;" vertex="1" parent="1">
+          <mxGeometry x="120" y="550" width="220" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="seo_bar_bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f1f3f5;strokeColor=#d8dde3;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="360" y="558" width="900" height="26" as="geometry" />
+        </mxCell>
+
+        <mxCell id="seo_bar_fill" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f2c94c;strokeColor=#d4a800;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="360" y="558" width="810" height="26" as="geometry" />
+        </mxCell>
+
+        <mxCell id="seo_score" value="90/100" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f2c94c;strokeColor=#d4a800;strokeWidth=2;fontSize=16;fontStyle=1;fontColor=#333333;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1290" y="544" width="86" height="54" as="geometry" />
+        </mxCell>
+
+        <mxCell id="seo_note" value="Meta taglar va strukturali markup mavjudligi SEO ko‘rsatkichini yuqori ushlab turadi." style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=11;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="360" y="589" width="1010" height="34" as="geometry" />
+        </mxCell>
+
+        <!-- KPI BOX -->
+        <mxCell id="kpi_box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8f9fa;strokeColor=#c7c7c7;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="120" y="650" width="1360" height="190" as="geometry" />
+        </mxCell>
+
+        <mxCell id="kpi_title" value="Qo‘shimcha texnik ko‘rsatkichlar" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=13;fontStyle=1;fontColor=#444444;" vertex="1" parent="1">
+          <mxGeometry x="150" y="665" width="320" height="24" as="geometry" />
+        </mxCell>
+
+        <mxCell id="kpi_tbt" value="TBT: 10 ms&#xa;100 / 100 ball" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#66bb6a;strokeWidth=1;align=center;verticalAlign=middle;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="150" y="705" width="220" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="kpi_cls" value="CLS: 0.00&#xa;100 / 100 ball" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#42a5f5;strokeWidth=1;align=center;verticalAlign=middle;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="390" y="705" width="220" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="kpi_static" value="Statik audit shariti&#xa;Backend ishlamaganligi sababli Performance nisbatan past" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3cd;strokeColor=#f0c36d;strokeWidth=1;align=center;verticalAlign=middle;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="630" y="705" width="360" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="kpi_explain" value="Accessibility va Best Practices balari Radix UI komponentlari, semantik HTML, zamonaviy API kontrakti hamda xavfsiz amaliyotlar bilan izohlanadi. Production deploy bosqichida backend kechikishi minimallashtirilsa, umumiy Performance balli yaxshilanishi kutiladi." style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=11;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="1010" y="700" width="430" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="footer_hint" value="Diagramma draw.io / diagrams.net ichiga to‘g‘ridan-to‘g‘ri import qilinadi. Rasm ostidagi caption bilan birga ishlatish tavsiya etiladi." style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;fontSize=10;fontStyle=2;fontColor=#888888;" vertex="1" parent="1">
+          <mxGeometry x="240" y="850" width="1120" height="18" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
+
