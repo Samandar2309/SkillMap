@@ -1,75 +1,77 @@
-<mxfile host="app.diagrams.net">
-  <diagram name="7-layer architecture">
-    <mxGraphModel dx="1200" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1">
-      <root>
-        <mxCell id="0"/>
-        <mxCell id="1" parent="0"/>
+<mxGraphModel dx="900" dy="650" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="700" math="0" shadow="0">
+  <root>
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
 
-        <!-- Edge -->
-        <mxCell id="edge" value="Edge Layer&#xa;Nginx 1.27&#xa;SSL, Rate Limit, Static" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e0e0e0;" vertex="1" parent="1">
-          <mxGeometry x="400" y="50" width="300" height="70" as="geometry"/>
-        </mxCell>
+    <!-- QATLAMLAR (orqa fon) -->
+    <mxCell id="L1" value="① TAQDIMOT QATLAMI  (Presentation — client-side)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;verticalAlign=top;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+      <mxGeometry x="40" y="40" width="600" height="110" as="geometry" />
+    </mxCell>
+    <mxCell id="L2" value="② REST API QATLAMI  (Django REST Framework)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;verticalAlign=top;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+      <mxGeometry x="40" y="190" width="600" height="100" as="geometry" />
+    </mxCell>
+    <mxCell id="L3" value="③ BIZNES-MANTIQ QATLAMI  (services/ va ai_engine/)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;verticalAlign=top;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+      <mxGeometry x="40" y="330" width="600" height="160" as="geometry" />
+    </mxCell>
+    <mxCell id="L4" value="④ MA'LUMOTLAR QATLAMI  (Data)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;verticalAlign=top;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+      <mxGeometry x="40" y="530" width="600" height="100" as="geometry" />
+    </mxCell>
 
-        <!-- App -->
-        <mxCell id="app" value="App Layer&#xa;Django + DRF&#xa;Gunicorn" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;" vertex="1" parent="1">
-          <mxGeometry x="400" y="140" width="300" height="70" as="geometry"/>
-        </mxCell>
+    <!-- L1 komponentlar -->
+    <mxCell id="c1" value="React 18 + TypeScript&#10;(SPA, Vite)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;" vertex="1" parent="1">
+      <mxGeometry x="70" y="85" width="165" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="c2" value="TanStack Query + Zustand&#10;(holat boshqaruvi)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;" vertex="1" parent="1">
+      <mxGeometry x="255" y="85" width="170" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="c3" value="Tailwind CSS + Radix UI / MUI&#10;(vizual qatlam)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;" vertex="1" parent="1">
+      <mxGeometry x="445" y="85" width="175" height="50" as="geometry" />
+    </mxCell>
 
-        <!-- AI -->
-        <mxCell id="ai" value="AI Layer&#xa;LLMRouter, Groq, Gemini&#xa;anti.py" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;" vertex="1" parent="1">
-          <mxGeometry x="400" y="230" width="300" height="70" as="geometry"/>
-        </mxCell>
+    <!-- L2 komponentlar -->
+    <mxCell id="c4" value="Serializer / View" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" vertex="1" parent="1">
+      <mxGeometry x="70" y="230" width="150" height="45" as="geometry" />
+    </mxCell>
+    <mxCell id="c5" value="JWT autentifikatsiya&#10;(simplejwt)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" vertex="1" parent="1">
+      <mxGeometry x="240" y="230" width="180" height="45" as="geometry" />
+    </mxCell>
+    <mxCell id="c6" value="drf-spectacular&#10;(OpenAPI 3)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" vertex="1" parent="1">
+      <mxGeometry x="445" y="230" width="175" height="45" as="geometry" />
+    </mxCell>
 
-        <!-- Data -->
-        <mxCell id="data" value="Data Layer&#xa;PostgreSQL 16&#xa;Redis 7" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;" vertex="1" parent="1">
-          <mxGeometry x="400" y="320" width="300" height="70" as="geometry"/>
-        </mxCell>
+    <!-- L3 komponentlar -->
+    <mxCell id="c7" value="services/ — ai_generator, task_service, quiz_service, validator, retry_engine, motivation_service ..." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d79b00;" vertex="1" parent="1">
+      <mxGeometry x="70" y="370" width="540" height="45" as="geometry" />
+    </mxCell>
+    <mxCell id="c8" value="ai_engine/ — router.py · providers.py · anti.py" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d79b00;" vertex="1" parent="1">
+      <mxGeometry x="70" y="425" width="360" height="50" as="geometry" />
+    </mxCell>
 
-        <!-- Background -->
-        <mxCell id="bg" value="Background Layer&#xa;Celery + Beat&#xa;Async Tasks" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;" vertex="1" parent="1">
-          <mxGeometry x="400" y="410" width="300" height="70" as="geometry"/>
-        </mxCell>
+    <!-- L4 komponentlar -->
+    <mxCell id="c9" value="PostgreSQL 17&#10;(JSONB)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#9673a6;" vertex="1" parent="1">
+      <mxGeometry x="120" y="565" width="200" height="50" as="geometry" />
+    </mxCell>
+    <mxCell id="c10" value="Django ORM&#10;(migratsiyalar)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#9673a6;" vertex="1" parent="1">
+      <mxGeometry x="360" y="565" width="200" height="50" as="geometry" />
+    </mxCell>
 
-        <!-- Frontend -->
-        <mxCell id="frontend" value="Frontend Layer&#xa;React + TypeScript&#xa;Vite, Tailwind" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#cce5ff;" vertex="1" parent="1">
-          <mxGeometry x="400" y="500" width="300" height="70" as="geometry"/>
-        </mxCell>
+    <!-- Tashqi AI provayderlar -->
+    <mxCell id="ext" value="AI PROVAYDERLAR&#10;Groq (Llama 3.3 70B)&#10;Gemini 1.5 Flash" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="690" y="400" width="170" height="80" as="geometry" />
+    </mxCell>
 
-        <!-- Observability -->
-        <mxCell id="obs" value="Observability Layer&#xa;Sentry, Prometheus&#xa;Logging" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;" vertex="1" parent="1">
-          <mxGeometry x="400" y="590" width="300" height="70" as="geometry"/>
-        </mxCell>
-
-        <!-- Arrows -->
-        <mxCell id="a1" edge="1" parent="1" source="frontend" target="edge" style="endArrow=block;">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-
-        <mxCell id="a2" edge="1" parent="1" source="edge" target="app" style="endArrow=block;">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-
-        <mxCell id="a3" edge="1" parent="1" source="app" target="ai" style="endArrow=block;">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-
-        <mxCell id="a4" edge="1" parent="1" source="app" target="data" style="endArrow=block;">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-
-        <mxCell id="a5" edge="1" parent="1" source="app" target="bg" style="endArrow=block;">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-
-        <mxCell id="a6" edge="1" parent="1" source="bg" target="data" style="endArrow=block;">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-
-        <mxCell id="a7" edge="1" parent="1" source="app" target="obs" style="endArrow=block;">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-
-      </root>
-    </mxGraphModel>
-  </diagram>
-</mxfile>
+    <!-- QATLAMLARARO STRELKALAR -->
+    <mxCell id="e1" value="HTTP / JSON so'rov" style="endArrow=block;html=1;strokeColor=#333333;fontSize=11;" edge="1" parent="1" source="L1" target="L2">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e2" value="validatsiyalangan ma'lumot" style="endArrow=block;html=1;strokeColor=#333333;fontSize=11;" edge="1" parent="1" source="L2" target="L3">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e3" value="ORM orqali saqlash / o'qish" style="endArrow=block;html=1;strokeColor=#333333;fontSize=11;" edge="1" parent="1" source="L3" target="L4">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e4" value="LLM chaqiruvi" style="endArrow=block;startArrow=block;html=1;strokeColor=#b85450;fontSize=11;dashed=1;" edge="1" parent="1" source="c8" target="ext">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+  </root>
+</mxGraphModel>
