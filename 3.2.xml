@@ -1,0 +1,119 @@
+<mxfile host="app.diagrams.net" agent="thesis" version="22.0.0">
+  <diagram name="3.2-rasm" id="server-layers">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="826" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- ==== LAYER 1: apps/ (HTTP qatlami) ==== -->
+        <mxCell id="L1" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DBEAFE;strokeColor=#2563EB;strokeWidth=2;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="60" y="50" width="900" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="L1T" value="apps/ — HTTP qatlami" style="text;html=1;align=left;verticalAlign=middle;fontSize=18;fontStyle=1;fontColor=#1E40AF;" vertex="1" parent="1">
+          <mxGeometry x="80" y="65" width="500" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="L1S" value="URL marshrutlari · view · serializatorlar" style="text;html=1;align=left;verticalAlign=middle;fontSize=11;fontStyle=2;fontColor=#475569;" vertex="1" parent="1">
+          <mxGeometry x="80" y="95" width="500" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="L1-1" value="apps/users" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#2563EB;fontSize=12;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="80" y="135" width="135" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="L1-2" value="apps/onboarding" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#2563EB;fontSize=12;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="225" y="135" width="135" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="L1-3" value="apps/roadmap" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#2563EB;fontSize=12;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="370" y="135" width="135" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="L1-4" value="apps/tasks" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#2563EB;fontSize=12;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="515" y="135" width="135" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="L1-5" value="apps/analytics" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#2563EB;fontSize=12;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="660" y="135" width="135" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="L1-6" value="apps/ai" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#2563EB;fontSize=12;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="805" y="135" width="135" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="L1N" value="Tashqi mijozdan keluvchi soʻrovlarni qabul qiladi va serializerga uzatadi" style="text;html=1;align=center;verticalAlign=middle;fontSize=10;fontStyle=2;fontColor=#64748B;" vertex="1" parent="1">
+          <mxGeometry x="80" y="200" width="860" height="25" as="geometry" />
+        </mxCell>
+
+        <!-- ARROW 1 -> 2 -->
+        <mxCell id="A12" style="endArrow=classic;html=1;rounded=0;strokeColor=#1F2937;strokeWidth=3;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="L1" target="L2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="A12L" value="services/ ga murojaat" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontStyle=2;fontColor=#1F2937;fillColor=#FFFFFF;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="430" y="252" width="160" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- ==== LAYER 2: services/ (Biznes mantiq) ==== -->
+        <mxCell id="L2" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D1FAE5;strokeColor=#059669;strokeWidth=2;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="60" y="290" width="900" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="L2T" value="services/ — Biznes mantiq qatlami" style="text;html=1;align=left;verticalAlign=middle;fontSize=18;fontStyle=1;fontColor=#065F46;" vertex="1" parent="1">
+          <mxGeometry x="80" y="305" width="600" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="L2S" value="Amaliy mantiq · validatsiya · hisobot · generatsiya" style="text;html=1;align=left;verticalAlign=middle;fontSize=11;fontStyle=2;fontColor=#475569;" vertex="1" parent="1">
+          <mxGeometry x="80" y="335" width="600" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="L2-1" value="prompt_engine/builder.py" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#059669;fontSize=11;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="80" y="375" width="195" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="L2-2" value="validator.py" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#059669;fontSize=11;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="285" y="375" width="135" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="L2-3" value="ai_generator.py" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#059669;fontSize=11;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="430" y="375" width="145" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="L2-4" value="task_service.py" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#059669;fontSize=11;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="585" y="375" width="145" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="L2-5" value="quiz_service.py" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#059669;fontSize=11;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="740" y="375" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="L2N" value="Ilovadan kelgan vazifalarni qayta ishlaydi, sxemani tekshiradi, AI orqali natija oladi" style="text;html=1;align=center;verticalAlign=middle;fontSize=10;fontStyle=2;fontColor=#64748B;" vertex="1" parent="1">
+          <mxGeometry x="80" y="440" width="860" height="25" as="geometry" />
+        </mxCell>
+
+        <!-- ARROW 2 -> 3 -->
+        <mxCell id="A23" style="endArrow=classic;html=1;rounded=0;strokeColor=#1F2937;strokeWidth=3;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="L2" target="L3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="A23L" value="ai_engine/ ga murojaat" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontStyle=2;fontColor=#1F2937;fillColor=#FFFFFF;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="430" y="492" width="160" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- ==== LAYER 3: ai_engine/ (AI integratsiya) ==== -->
+        <mxCell id="L3" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF3C7;strokeColor=#D97706;strokeWidth=2;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="60" y="530" width="900" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="L3T" value="ai_engine/ — AI integratsiya qatlami" style="text;html=1;align=left;verticalAlign=middle;fontSize=18;fontStyle=1;fontColor=#92400E;" vertex="1" parent="1">
+          <mxGeometry x="80" y="545" width="600" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="L3S" value="LLM marshrutlash · anti-gallyutsinatsiya filtri · qayta urinish" style="text;html=1;align=left;verticalAlign=middle;fontSize=11;fontStyle=2;fontColor=#475569;" vertex="1" parent="1">
+          <mxGeometry x="80" y="575" width="600" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="L3-1" value="router.py" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#D97706;fontSize=11;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="120" y="615" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="L3-2" value="anti.py" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#D97706;fontSize=11;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="310" y="615" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="L3-3" value="providers/&#10;(Groq · Gemini)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#D97706;fontSize=11;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="500" y="610" width="170" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="L3-4" value="retry_engine.py" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#D97706;fontSize=11;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="700" y="615" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="L3N" value="Sunʼiy intellekt bilan barcha integratsiya shu yerda yopiq saqlanadi" style="text;html=1;align=center;verticalAlign=middle;fontSize=10;fontStyle=2;fontColor=#64748B;" vertex="1" parent="1">
+          <mxGeometry x="80" y="678" width="860" height="25" as="geometry" />
+        </mxCell>
+
+        <!-- Right-side rule annotation -->
+        <mxCell id="RULE" value="&lt;b&gt;Bogʻliqlik qoidasi&lt;/b&gt;&lt;br&gt;&lt;br&gt;apps/ → services/&lt;br&gt;services/ → ai_engine/&lt;br&gt;&lt;br&gt;&lt;i&gt;Teskari bogʻliqlik YOʻQ&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF7ED;strokeColor=#9CA3AF;strokeWidth=1;fontSize=11;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="985" y="320" width="170" height="140" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
